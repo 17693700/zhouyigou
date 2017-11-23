@@ -1,0 +1,556 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<HTML xmlns="http://www.w3.org/1999/xhtml">
+<head id="headerCtrl">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<link href="__static__/home/css/catalog.css" rel="stylesheet" type="text/css">
+<?include(load_user_diy('static.php'));?>
+<script type="text/javascript" src="__static__/home/js/catalog.js"></script>
+<!--layer弹出层插件-->
+<script type="text/javascript" src="__static__/common/js/layui/layui.js"></script>
+
+</head>
+<script language="javascript"> 	
+//询价
+function enquiry(shop_id,goods_id,keywords,i){
+	<?if($_COOKIE['IYUNTISITE_UUID']!=''){ ?>
+		var sub='';
+		sub+='<div class="enquiry_div">';
+		sub+='<img src="';
+		sub+=$('.goods_image'+i).attr('src');
+		sub+='" width="90" height="90" align="top"/>';
+		sub+='<span class="enquiry_goods_name">';
+		sub+=$('.goods_name'+i).html();
+		sub+='</span>';
+		sub+='<span class="enquiry_price">价格：<font color="#ff6600">';
+		sub+=$('#real_price'+i).html();
+		sub+='</font></span>';
+		sub+='</div><br/>';
+		sub+='<form class="enquiry_form" method="post" onsubmit="ale();" action="/member/do.php?ac=enquiry_price">';
+		sub+='<input type="hidden" name="goods_id" value="'+goods_id+'">';
+		sub+='<input type="hidden" name="shop_id" value="'+shop_id+'">';
+		sub+='<input type="hidden" name="enquiry_type" value="one">';
+		sub+='心理价位：<input type="text" name="enquiry_price"><br/><br/>';
+		sub+='您的姓名：<input type="text" name="username">&nbsp;&nbsp;';
+		sub+='<input type="radio" name="sex" value="先生" checked="checked">&nbsp;先生&nbsp;&nbsp;<input type="radio" name="sex" value="女士">&nbsp;女士<br/><br/>';
+		sub+='手机号码：<input type="text" name="mobile"><br/><br/>';
+		sub+='备注信息：<textarea name="remark"></textarea>&nbsp;&nbsp;信息提交后我们会尽快联系您。<br/><br/>';
+		sub+='<input type="submit" class="sub" value="提交">';
+		sub+='</form>';
+		//页面一打开就执行，放入ready是为了layer所需配件（css、扩展模块）加载完毕
+		layer.ready(function(){ 
+			layer.open({
+				type: 1,
+				title:"询价：",
+				area: ['550px', '470px'],
+				shadeClose: true, //点击遮罩关闭
+				content: '\<\div style="padding:20px;">'+sub+'\<\/div>'
+			});
+		});
+	<?}else{?>
+		alert('请登录后再询价!');
+		window.open("/member/login.php");
+	<?}?>
+}
+</script>
+<body> 
+
+{include file="common/head" /}
+  
+<style>
+.cate-list{display:none;}
+</style>
+
+<div id="wrap" style="width:1200px;">
+  <div id="content-text" class="">
+    <div id="layout_contents">
+      <div id="part_content">
+        <div class="category_main search_page_layout_type1">
+          <div class="node_path">
+            <div style="float:left;"> 
+	            <a href="{$Think.config.sitename}">首页</a>
+	            <span>&gt;</span>
+	            <a href="{:url('index/Index/catalog','cat_id=0')}">产品分类</a>
+	            {if !empty($brand_info)} 
+				<div class="mod-brand-info clearfix">
+					<div class="mod-brand-logo">
+						<img src="___images__/{$brand_info.brand_ico}" alt="{$brand_info.brand_name}" title="{$brand_info.brand_note}" width="90" height="60"/>
+					</div>
+					<p class="mod-brand-desc">{$brand_info.brand_note}</p>
+				</div>
+				{/if}
+
+				{php}
+				if(!empty($this_parent_catalog)){ 
+					$max_level = sizeof($this_parent_catalog) -1;  
+					for($i=$max_level; $i>=0; $i--){
+				{/php}
+				<span>&gt;</span>
+				<span style="font-size:12px; margin:0!important;">
+					<a href="{:url('index/Index/catalog','cat_id='.$this_parent_catalog[$i]['cat_id'])}" class="active"><?=$this_parent_catalog[$i]['cat_name']?></a>
+				</span>  
+				{php} }} {/php}
+          </div>
+		  <div class="clear"></div>
+
+		  {if !empty($this_son_catalog)} 
+          <table class="search_filter_table">
+            <tr>
+              <th>{$this_catalog.cat_name}</th>
+              <td>
+				<div id="summary_category_list" class="summary_list split_line5">
+                  <div class="split_list">
+				    <ul>
+					{if !empty($this_son_catalog)}
+						{foreach $this_son_catalog as $key=>$val}
+							<li style="float:left;width:20%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+								<img src="__static__/home/images/categoryListmark.gif" align="center">&nbsp;
+								<a class="ejfl_name" style="padding-top:2px;" href="/search?keywords={$keywords}&id=<?=$val['cat_id']?>">{$val.cat_name}</a>
+							</li>
+						{/foreach}
+					{else /}
+					<?
+						}
+					}else{	//搜索不到商品则显示全部的二级分类
+						$sql = "select cat_id,cat_name from `t_goods_catalog` where level='2' order by `order_id`";
+						$query_rows_ejfl=$db->get_all($sql);
+						
+						foreach($query_rows_ejfl as $val){
+					?>
+						<li style="float:left;width:20%;">
+							<img src="<?=$g_static_path?>images/categoryListmark.gif" align="center">&nbsp;
+							<a class="ejfl_name" style="padding-top:2px;" href="/search?id=<?=$val['cat_id']?>"><?=$val['cat_name']?></a>
+						</li>
+					<?
+						}
+					}
+					?>
+					</ul> 
+                  </div>
+				</div>
+			  </td>
+            </tr> 
+          </table>
+		  {/if}
+
+<div style="margin-top:10px">
+
+	<b>相关搜索分类：</b>
+
+	<a href="/search?keywords={$keywords}&id=">相关分类轴承</a>
+
+<div>
+
+{if $keywords != ''}
+<script type="text/javascript">
+function set_s_cond(n, v){
+	document.getElementById(n).value = v;  
+	document.getElementById('form_search_cond').submit();
+}
+</script>
+<div style="height:6px;"></div> 
+	<div class="round w980">
+		<div class="cond">
+			{ if($pp_array!='' || $kcd_array!='' || $price_array['max_price']>0){ }
+			<div class="caption"> 
+				<span>“<font color="red">{$keywords}</font>”的筛选条件</span><a href="/search?keywords={$keywords}">清除筛选条件</a> 
+			</div>
+			<div class="clr"><br/></div>
+			{/if}
+
+			<form id="form_search_cond" method="get" action="/search">
+				<input type="hidden" name="keywords_cond" value="true">
+				<input type="hidden" name="cat_id" value="{$cat_id}">
+				<input type="hidden" name="keywords" value="{$keywords}">
+				<input type="hidden" id="brand_id" name="brand_id" value="{$brand_id}">
+				<input type="hidden" id="s_kcd" name="s_kcd" value="{$s_kcd}">
+				<input type="hidden" id="s_price" name="s_price" value="{$s_price}">
+			</form>
+
+            <div class="cond_item">  
+            	{if $pp_array}
+				<ul style="float:left;width:8%">
+					<li><strong>品&nbsp;&nbsp;&nbsp;牌：</strong></li>
+				</ul>
+				<ul style="float:right;width:90%"> 
+					<li class="search_li"><a href="javascript:set_s_cond('brand_id','')" {if $brand_id == ''} class="cond_hover" style="color:white"{/if}>全部</a></li>  
+					<div class="recommended_brand">	
+						<!--<a class="more" href="javascript:;">更多</a>-->
+						{foreach $pp_array as $val}
+							<li class="search_li">
+								<a {if $brand_id == $val.brand_id} class="cond_hover" style="color:white" {/if} href="javascript:set_s_cond('brand_id','{$val.brand_id}')">
+									{$val.brand_name}({$val.c})
+								</a>
+							</li>
+						{/foreach}
+					</div>
+				</ul>
+				<div style="clear:both"></div>
+				{/if}
+
+				{if $price_array['max_price'] > 0}
+				<ul style="float:left;width:8%">
+					<li><strong>价&nbsp;&nbsp;&nbsp;格：</strong></li>
+				</ul>
+				<ul style="float:right;width:90%">  
+					<li class="search_li" >
+						<a href="javascript:set_s_cond('s_price','')" {if $s_price == ''} class="cond_hover" style="color:white"{/if}>全部</a>
+					</li> 
+					{$price_range}
+				</ul>
+				<div style="clear:both"></div>
+				{/if}
+          </div>
+		  <div class="clr"></div>
+	</div> 
+</div> 
+{/if}
+
+{$args_conds!=''  && $keywords==''}
+<script type="text/javascript">
+function set_c_cond(n, v){
+	document.getElementById(n).value = v;   
+	
+	if(v==''){ 
+		$("input[name='"+n+"[]']").each(function() {
+			$(this).attr('checked',false);
+		});  
+	}
+
+	document.getElementById('form_cat_cond').submit();
+}
+</script>
+<div style="height:6px;"></div> 
+	<div class="round w980">
+		<div class="cond">
+			<div class="caption"> 
+				<span>分类筛选条件</span><a href="/search?id={$cat_id}">清除筛选条件</a> 
+			</div>
+			<div class="clr"><br/></div>
+            <div class="cond_item"> 
+
+				<form id="form_cat_cond" method="get" action="/search"> 
+					<input type="hidden" name="cat_id" value="{$cat_id}">
+					<input type="hidden" id="brand_id" name="brand_id" value="{$brand_id}">
+					<input type="hidden" id="s_cz" name="s_cz" value="{$s_cz}">
+					<input type="hidden" id="s_cd" name="s_cd" value="{$s_cd}">
+					<input type="hidden" id="s_kcd" name="s_kcd" value="{$s_kcd}">
+
+					{foreach $args_conds as $val}
+					<div style="width:80px;float:left">
+						<strong>{$val.cond_name}：</strong>
+					</div>
+					<div style="width:90%;float:right;">
+						<li class="cat_li">
+							<a href="javascript:set_c_cond('{$val.cond_name}','')" {if $val.cond_name==''} class="cond_hover" style="color:white"{/if}>全部</a>
+						</li>
+						<?
+						if(notnull($args_cond_items)){
+						    foreach ($args_cond_items as $cval){    
+								$cval_cond_value 	= $cval['cond_value'];
+								$cval_cond_brand_id = $cval['brand_id'];
+								$cval_cond_value 	= str_replace('&amp;', '＆', $cval_cond_value);
+								$cval_cond_value 	= str_replace('&', '＆', $cval_cond_value);
+						?> 
+						<li class="cat_li"> 
+							<input type="checkbox" name="<?=$cond_name?>[]" value="<?=$cval_cond_value?>" 
+							<?
+							if(is_array($_GET[$cond_name])){
+								foreach ($_GET[$cond_name] as &$c_v) {
+									if($cval_cond_value==$c_v){
+										echo "checked";
+									}
+								}
+							}
+							?>
+							/>  
+							<a 
+							<?if(req($cond_name)==$cval_cond_value or $cval_cond_brand_id==$this_brand_id){?>class="cond_hover" style="color:white"<?}?> 
+							<?
+							if(is_array($_GET[$cond_name])){
+								foreach ($_GET[$cond_name] as &$c_v) {
+									if($cval_cond_value==$c_v){
+										echo 'class="cond_hover" style="color:white"';
+									}
+								}
+							}
+							?> 
+							href="javascript:set_c_cond('<?=$cond_name?>','<?if($cond_name=='s_pp'){echo $cval_cond_brand_id;}else{echo $cval_cond_value;}?>')">
+								<?=$cval_cond_value?>
+							</a> 
+						</li>
+						<? 
+						    }
+						}
+						?> 
+					</div> 
+					<div class="clr clearfix" style="margin-bottom:5px"></div> 
+					{/foreach} 
+					<div style="text-align:right;"> 
+						<input type="submit" value="确定筛选" style="font-weight:bold;padding:5px 7px 5px 7px;">
+					</div>
+				</form>
+          </div>
+		  <div class="clr"></div>
+	</div> 
+</div> 
+{/if}
+
+<?
+$urler = '&';
+if(strpos($g_full_url,'?') === false){
+	$urler = '?';
+}
+
+$urler = $g_full_url.$urler;
+?>
+<div class="round w980" style="border-top:#ff4200 2px solid;margin-top:10px;background-color:#efefef">
+	<div style="padding:10px;">
+		<div style="width:840px;float:left;">
+		<span><a href="?default">综合排序</a> &nbsp;</span>
+ 
+		<span> 
+			<?if($order_pattern=='sale'){?>
+			<a href="<?=$urler?>order_pattern=default">
+			<font style="color:#BA1A16;">销量</font> <img src="/common/icon/down_red.png"/></a>
+			<?} else {?>
+			<a href="<?=$urler?>order_pattern=sale"> 销量 <img src="/common/icon/down_grey.png"/></a>
+			<?}?>
+			&nbsp; 
+		</span> 
+		
+		<span> 
+			<?if($order_pattern=='new'){?>
+			<a href="<?=$urler?>order_pattern=default"><font style="color:#BA1A16;">新品</font> <img src="/common/icon/down_red.png"/></a>
+			<?} else {?>
+			<a href="<?=$urler?>order_pattern=new">新品 <img src="/common/icon/down_grey.png"/></a>
+			<?}?>
+			&nbsp; 
+		</span>
+
+		<span> 
+			<?if($order_pattern=='hot'){?>
+			<a href="<?=$urler?>order_pattern=default"><font style="color:#BA1A16;">人气</font> <img src="/common/icon/down_red.png"/></a>
+			<?} else {?>
+			<a href="<?=$urler?>order_pattern=hot">人气 <img src="/common/icon/down_grey.png"/></a>
+			<?}?>
+			&nbsp; 
+		</span>
+
+		&nbsp;
+		
+		<?if($order_pattern=='price' && $order_updown!=''){?> 
+			<a href="<?=$urler?>order_pattern=price">默认方式</a>
+		<?}else{?>
+			<a href="<?=$urler?>order_pattern=price&order_updown=down">价格</a>
+		<?}?>
+
+		<?if($order_pattern=='price' && $order_updown=='down'){?> 
+			<a href="<?=$urler?>order_pattern=price&order_updown=up"><font style="color:#BA1A16;">由低到高</font> <img src="/common/icon/up_red.png"/></a>
+		<?} else if($order_pattern=='price' && $order_updown=='up'){?> 
+			<a href="<?=$urler?>order_pattern=price&order_updown=down"><font style="color:#BA1A16;">由高到低</font> <img src="/common/icon/down_red.png"/></a>
+		<?} else {?>
+			<a href="<?=$urler?>order_pattern=price&order_updown=down"><img src="/common/icon/updown.png" title="点击按价格排序"/></a>
+		<?}?> 
+		<span>
+		&nbsp; &nbsp;
+		<input type="text" id="start_price" size="4" value="<?=req('sp')?>" placeholder="&yen;"  > 
+		-
+		<input type="text" id="end_price" size="4" value="<?=req('ep')?>" placeholder="&yen;"  > <input type="button" value="提 交" onclick="by_price()" style="padding:4px">
+		</span>
+		<div style="width:180px;float:right;text-align:left;color:#999999;padding-top:1px;">为您搜索到相关产品 <u style="color:red"><?=$total_number?></u> 个</div>
+		</div>
+		
+		<div style="width:166px;float:right;text-align:right;padding-top:1px;"> 
+			<span>每页显示：</span>
+			<a href="/catalog.find?action=page_limit&limit=30" <?if($_COOKIE['catalog_limit']=='30'){?>class="hover"<?}?>>30</a>
+			<a href="/catalog.find?action=page_limit&limit=42" <?if($_COOKIE['catalog_limit']=='42'){?>class="hover"<?}?>>42</a> 
+		</div>
+
+		<div class="clr"></div>
+	</div>
+</div>
+
+	<? 
+		if(notnull($query_rows)){
+			foreach ($query_rows as $i=>$val){    	
+				$goods_image = "/upfiles/$g_siteid/images_183/".$val['goods_image'];
+
+				$sql = "SELECT * FROM t_shop WHERE shop_id='".$val['shop_id']."' ";  
+				$this_shop = $db->get_one($sql);
+	?>
+          <div class="product_grid_box item">
+            <div class="product_grid_image img"> <a href="{$Think.config.sitename}/thread-<?=$val['goods_id']?>.html" target="_blank"> 
+			<img class="goods_image<?=$i?>" title="<?=$val['goods_name']?>" alt="<?=$val['goods_name']?>" src="<?=$goods_image?>" style="border:1px solid #ccc;padding:3px;width:96%;" onerror="this.src='<?=$g_static_path?>/images/nopic.jpg'"/> </a> </div>
+			
+			<?if($val['real_price']=='999' || $val['real_price']=='0'){?>
+				价格：<b style="color:red">会员可见</b>
+			<?}else{?>
+            <b id="real_price<?=$i?>" class="grid_price_fromto price"> 
+			  &yen;<?=number_format($val['real_price'], 2, '.', '');?>
+			  <span></span>
+			</b>
+			<?}?>
+			
+			<div class="product_grid_number" style="cursor: pointer;background:#FF9900;color:#fff;padding:0px 5px;font-size:!2px;" onclick="add_follow(<?if($_COOKIE['IYUNTISITE_UUID']){echo $_COOKIE['IYUNTISITE_UUID'];}else{echo 0;}?>);">点击关注</div>
+
+            <b class="txt" style="margin-top:4px;padding:0px;font-size:14px;font-weight:bold;display:block;width:180px;float:none;"><a target="_blank" href="{$Think.config.sitename}/thread-<?=$val['goods_id']?>.html"><b class="goods_name<?=$i?>" style="color:#646464;"><?=$val['goods_name']?></b></a></b>
+			
+			<?=$val['brand_name']?><br/>
+			
+			<div class="product_grid_ico">
+				<img src="<?=$g_static_path?>images/ziying.png" title="该商品为三九轴承网官方自营"/>
+				<img src="<?=$g_static_path?>images/daofu.png" title="支持货到付款"/>
+				<img src="<?=$g_static_path?>images/ico_cn2.jpg" title="7天无条件" style="margin-left:48px;"/>
+				<img src="<?=$g_static_path?>images/ico_cn3.png" title="30天调换" width="16" height="16"/>
+				<img src="<?=$g_static_path?>images/ico_cn4.png" title="一年保修"/>
+				<a onclick="enquiry(<?=$val['shop_id']?>,<?=$val['goods_id']?>,<?=req('keywords')?>,<?=$i?>);" style="position:relative;left:0px;" href="javascript:;">
+					<img src="<?=$g_static_path?>images/custom_service.png" title="点此提交询价"/>
+				</a>
+			</div>
+          </div>
+		  <?
+			}
+		}
+	?>  
+	
+	<?
+	if(req('cmd')=='catalog'){
+		$urler = "/catalog?id=".req('id')."&";
+	} else {
+		$urler = "?";
+	}
+	
+	if($total_number=='') $total_number=0;
+	?>
+          <div class="clearfix clr"></div>
+          <div class="page_curl">  
+			<!-- page number start -->
+			<p class="page_curl_number" style="padding-top:20px;">
+			<?if($total_number==0 && $g_zhan['zhan_id']!=0){?>
+				<a class="aaa" style="margin-right:22px;border:none;" target=_black href="<?=$g_index?>search?id=&keywords=<?=req('keywords')?>"><img src="./images/all_select.jpg" height="45"/></a>
+			<?}?>
+				共搜索到 <u style="color:red"><?=$total_number?></u> 条产品信息
+			<?if($total_number==0){?>
+				<?if($g_zhan['zhan_id']!=0){?>
+					<a style="margin-left:22px;border:none;" target=_black href="<?=$g_index?>search?id=&keywords=<?=req('keywords')?>"><img src="./images/all_select.jpg" height="45"/></a>
+				<?}?>
+			<br/><br/>
+			<p>
+				<a class="a_jump but" href="http://wpa.qq.com/msgrd?v=3&uin=2880522614&site=qq&menu=yes" title="联系客服报价" target="_black"><img src="<?=$g_static_path?>images/online-enquiry.jpg" width="140"/></a>&nbsp;&nbsp;
+				<a class="a_jump but" href="{$Think.config.sitename}/union/join.php" target=_black title="商家注册">
+				<img src="<?=$g_static_path?>images/upload_products.jpg" width="140"/></a>
+			</p>
+			<p>
+				<a class="a_jump" href="" target=_black>下载</a>"<?=req('keywords')?>"的轴承照片&nbsp;&nbsp;or&nbsp;&nbsp;
+				<a class="a_jump" href="" target=_black>上传</a>"<?=req('keywords')?>"的轴承照片<font color="red">（领积分，兑现金）</font>
+			</p>
+			<br/><br/><br/><br/>
+			
+			<?include(load_user_diy('preferred_brand.php'));?>
+			
+			<?}?>
+			<?
+			$now_link='http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
+			$pagination_url=preg_replace('/&p=\d/', '', $now_link)."&";
+			
+			if(notnull($query_rows)){?>
+			<a href="<?=$pagination_url?>p=<?='1'.$page_args?>" class="page_curl_btn">首 页</a>
+			<a href="<?=$pagination_url?>p=<?=$prev_number.$page_args?>" class="page_curl_btn">上一页</a>
+			<span>&nbsp;</span>
+			<?
+			if($total_page<6){
+				for($m=1; $m<=$total_page; $m++){
+					if($now_page==$m){
+						echo "<a href='".$urler."p=$m$page_args' style='color:red'>$m</a> "; 
+					} else {
+						echo "<a href='".$urler."p=$m$page_args'>$m</a> "; 
+					}
+				}
+			} else {
+				if($now_page<6){
+					for($m=1; $m<6; $m++){
+						if($now_page==$m){
+							echo "<a href='".$urler."p=$m$page_args' style='color:red'>$m</a> "; 
+						} else {
+							echo "<a href='".$urler."p=$m$page_args'>$m</a> "; 
+						}
+					}
+					echo "<a href='".$urler."p=6$page_args'>6</a> "; 
+					echo " ... <a href='".$urler."p=$total_page$page_args'>$total_page</a> ";
+				}
+				
+				if($now_page>=6){
+					echo "<a href='".$urler."p=1$page_args'>1</a> ... ";
+					$max_page = $now_page+2;
+					if($max_page>$total_page){
+						$max_page = $now_page;
+					}
+					for($m=$now_page-2; $m<=$max_page; $m++){ 
+						if($now_page==$m && $now_page<=$total_page){
+							echo "<a href='".$urler."p=$m$page_args' style='color:red'>$m</a> "; 
+						} else {
+							echo "<a href='".$urler."p=$m$page_args'>$m</a> "; 
+						} 
+					}
+					if($max_page<$total_page){
+						echo " ... <a href='".$urler."p=$total_page$page_args'>$total_page</a> ";
+					}
+				} 
+			}
+			?> 
+			<span>&nbsp;</span>
+			<a href="<?=$pagination_url?>p=<?=$next_number.$page_args?>" class="page_curl_btn">下一页</a>   
+			<a href="<?=$pagination_url?>p=<?=$total_page.$page_args?>" class="page_curl_btn">尾 页</a>
+			</p>
+			<!-- page number end //--> 
+			<?}?>
+          </div>
+        </div>
+		
+		<p style="width:1200px;text-align:left;margin:0 auto;">  
+			  <?
+			  if(notnull($friendlink)){
+				  echo '友情链接：';
+				  foreach ($friendlink as $val){ 
+			  ?>
+			  <a style="padding:0 10px;color:#666;" href="<?=$val['link_url']?>" title="<?=$val['link_title']?>" target="_blank"><?=$val['link_title']?></a>
+			  <?
+				  }
+			  }
+			  ?>
+		</p>
+
+		<div class="clearfix clr"><br/></div>
+         
+      </div>
+    </div>
+  </div>
+</div>
+
+{include file="common/foot" /}
+   
+</body>
+</html>
+
+<script>
+function add_follow(user_id){
+	if(user_id==0){
+		alert('请先登录。');
+		location.href='/member/login.php';
+	}
+	else{
+		alert('关注成功');
+	}
+}
+$('.cate-list').css('display','none');
+
+	$(".category").mouseover(function(){  
+		 $('.cate-list').css("display","block");
+	});
+	$(".category").mouseout(function(){  
+		 $('.cate-list').css("display","none");
+	}); 
+</script>

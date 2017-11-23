@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>登录</title>
+		<link rel="stylesheet" href="css/index.css">
+	</head>
+	<body>
+		<div class="loginTop">
+			<div class="topLeft">
+		        <div class="leftLogo">
+		            <a href="/" class="logo" style="height: 100%">
+		            	<img src="Images/logo.png" />
+		            </a>
+		            <div class="login"><span>|</span><h class="font18 fl">用户登录</h>
+		            <p class="fl" style="padding-left:20px;"><a href="/">返回首页</a></p></div>
+		        </div>
+		    </div>
+		    <div class="topRight">
+		        <div class="topRegister">
+		            <span>没有赛和账号</span><a href="#">立刻注册</a>
+		            
+		        </div>
+		    </div>
+		    
+		</div>
+		<!--head-->
+		
+		<div class="loginMain">
+			<div class="main">
+				<div class="mainLeft">
+		            <div class="leftBorder">
+		                <div class="borderMain">
+		                    <h4>赛和轴承网</h4>
+		                    <p>让轴承生意变得更简单！</p>
+		                    <div class="borderLeft">
+		                        <div class="borderImg"></div>
+		                        <div class="ads">地址：浙江慈溪白沙路街道永利大厦8楼</div>
+		                        <div class="tel">联系电话：0574-6319 8285</div>
+		                    </div>
+		                    <img src="images/wx_code3.png">
+		                </div>
+		            </div>
+		        </div>
+		        <div class="mainRight">
+		        	<div class="rightBorder">
+		        		<div class="borderTop">
+	                        <span>用户登录</span>
+	                        <a href="#">立刻注册</a>
+	                        
+	                    </div>
+	                    <form id="user" action="/Commons/authorize/login" method="post">
+	                    	<ul>
+								<li>
+									<input class="userAccount" type="text" id="userAccount" name="userAccount" datatype="userAccount" nullmsg="请输入您的手机号/邮箱地址！" errormsg="手机号/邮箱地址" value="" placeholder="手机号/邮箱地址">
+									<div class="Validform_checktip" id="userAccountMsg"></div>
+									<input type="hidden" id="projectCode" name="projectCode" value="SILLCN-WWW">
+									<input type="hidden" id="url" name="url" value="">
+								</li>
+								<li>
+									<input class="userPassword" type="password" id="userPwd" name="userPwd" datatype="userPwd" nullmsg="请输入您的登录密码！" errormsg="密码格式：6~20位英文字母、数字、下划线、中划线或.@字符！" placeholder="密码">
+									<div class="Validform_checktip" id="userPwdMsg"></div>
+								</li>
+								<li class="f-password clearfix">
+								    <div class="fl">
+									    <input id="rmbuser" type="checkbox" name="rmbUser" checked="checked">
+										<label for="rmbuser" style="display: inline;">记住我</label>
+								
+								    </div>
+								    <div class="fr">
+									    <a href="#" target="_blank">免费注册</a>
+										<a href="#">忘记密码</a>
+									
+								    </div>
+									
+								</li>
+								<li>
+									<input type="button" id="btnSubmit" name="btnSubmit" value="登录">
+									<div class=" Validform_checktip" id="jsonMsg"></div>
+								</li>
+							</ul>
+                    		<div>
+								<input type="hidden" name="token" value="E081057D-2BBA-4E8C-A0C4-D64C7B8A9BF0">
+							</div>
+	                    </form>
+		        	</div>
+		        </div>
+		        
+			</div>
+		</div>
+		<!--main-->
+		
+		<div class="footerLogin">
+			<div class="inner">
+				<ul class="clearfix">
+		            <li><a href="#">关于我们</a></li>
+		            <li><a href="#">联系我们</a></li>
+		            <li><a href="#">帮助中心</a></li>
+		            <li><a href="#">加入我们</a></li>
+		            <li><a href="#">战略合作方</a></li>
+		            <li style="border: 0"><a href="#">意见反馈</a></li>
+		        </ul>
+		        <p class="footerWord">Copyright© 2017. All rights reserved.By 赛和轴承网浙ICP备16042099号</p>
+			</div>
+			
+		</div>
+		
+		
+	</body>
+</html>

@@ -1,0 +1,202 @@
+<?
+session_start();
+include('../config.php'); 
+include('common.php');
+include('../o2o/9558/qr_code.php');
+if($_COOKIE['IYUNTISITE_UUID']!=''){
+	echo "<script>location.href='$g_index'</script>";
+	exit();
+}
+//验证用户是否扫了二维码
+$_SESSION['ticket']=$ticket;
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>新用户注册</title>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" /> 
+<link href="/member/css/register.css" rel="stylesheet" type="text/css"/ > 
+<script src="<?=$g_domain?>ajax/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="/member/js/register.js" charset=gb2312></script>
+
+<?include('static.php');?>
+
+</head>
+<script>
+$(function(){
+	window.setInterval(connect_wechat,1000);
+	function connect_wechat(){
+		$.ajax({
+			type: "POST",
+			url: "do.php",
+			data: {ac:'wechat_register_ajax',ticket:'<?=$ticket?>'},
+			dataType: "text",
+			success: function(data){
+				if(data==1){
+					location.href="register2.php";
+				} 
+			}
+		});
+	}
+	  
+});
+</script>
+<body> 
+<div class="w">
+  <div id="logo">
+	<a href="/" ><img src="./images/logo.png" width="170" height="60"/></a>
+	<b class="gerendenglu">新用户注册</b>
+	<div class="yijingzhuce">
+		<span class="span1">我已经注册，马上</span>
+		<a href="login.php" style="color:#ff4200;font-size:15px;">登录</a>
+	 </div>
+  </div>
+</div>
+<div style="width:90%;height:10px;border-bottom:1px solid #D2D2D2;margin:0 auto;"> 
+</div>
+<div class="reg_box">
+	<div class="regLeft" style="position:relative;height:587px;">
+		<div class="ways_list_title">
+			<span style="margin-right:15px;border-bottom:2px solid #FF4200;padding:3px;">微信注册</span>
+			<span>用户名注册</span>
+		</div>
+		<div class="ways_list" style="width:100%;height:auto;position:absolute;left:0;top:40px;">
+			<p style="width:480px;margin:0 auto;height:57px; text-align:center;background:url('images/register_process.png') no-repeat;margin-top:22px;"></p>
+			<br/>
+			<p style="font-size:15px;text-align:center;height:440px;line-height:44px;">
+			请使用微信扫码注册<br/>
+
+			&nbsp;<img src='https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=<?=urlencode($ticket)?>' width='280' height='280' style='border:1px solid #D2D2D2'>
+
+			<br/>
+			创建完成后请用此微信扫码登录
+			</p>
+		</div>
+		<div class="ways_list" style="width:100%;height:auto;position:absolute;left:0;top:40px;display:none;">
+			<form action="do.php?ac=register" method="post" id='form'>
+					<div class="divda">
+						<ul class="inputul">
+							<input type="hidden" name="ref" value="<?=req('ref')?>">
+							<input type="hidden" name="wechat_id" value="<?=$wechat_msg['wechat_id']?>"/>
+							
+							<li>
+								<div><span style="color:red;">*</span>&nbsp;用户名：</div>
+								<input class="inpu" type="text" name="username" id="username" size="35" placeholder="由数字，字母，下划线组成..."/>
+								<span class="pro" id="name"></span>
+							</li>
+							<li>
+								<div><span style="color:red;">*</span>&nbsp;密码：</div>
+								<input class="inpu" id="password" type="password" name="password" size="35" placeholder="由数字，字母，下划线组成..."/>
+								<span class="pro" id="mima"></span>
+							</li>
+							<li>
+								<div><span style="color:red;">*</span>&nbsp;确认密码：</div>
+								<input class="inpu" type="password" id="repassword" name="repassword" size="35" placeholder="再次确认您的密码..."/>
+								<span class="pro" id="remima"></span>
+							</li>
+							<li>
+								<div><span style="color:red;">*</span>&nbsp;手机号码：</div>
+								<input class="inpu" id="phone" type="text" name="phone" size="35" placeholder="手机号码..."/>
+								<span class="pro" id="pho"></span>
+							</li>
+							<li style="padding-bottom:20px;">
+								<div><span style="color:red;">*</span>&nbsp;验证码：</div>
+								<input class="inpu" type="text" id="authcode" name="authcode" style="width:130px;height:25px;"/>
+								<span class='imgyzm'>
+									<img id="yzm" style="height:34px;" src="./createyzm.php" onclick="this.src='./createyzm.php'"/>
+								</span>
+								<br/>
+								<!--<input type="button" class="send1" value="免费获取短信动态码"/>-->
+							</li>
+							<!--<li>
+								<div><span style="color:red;">*</span>&nbsp;短信动态码：</div>
+								<input class="inpu" type="text" name="dynamic_code"  size="35" />	
+							</li>-->
+							<!--li>
+								<div style="width:100%;text-align:center;">我已阅读并同意 <a href=''>会员注册协议</a> 和 <a href="">隐私保护政策</a>。</div>
+							</li-->
+							<li>
+								<input type="submit" class="zhuce" value=''/>
+							</li>
+						</ul>
+					</div>
+					</form>
+		</div>
+	</div>
+	<div class="regRight">
+	<!--
+		<div style="width:140px;margin:0px auto;">
+			<img src="images/qiebi.png"/>
+		</div>
+		<div style="margin:10px auto;color:#666;font-size:20px;text-align:center;">企鹅币</div>
+		<div class="qx_zi">
+			<img src="images/quxian.png"/>
+		</div>
+		-->
+		<div class="reg_title">省钱·省心·省力</div>
+		<ul>
+			<li>
+				<div class="iconfont">&#xe62c;</div>
+				<span>网站建设</span>
+			</li>
+			<li>
+				<div class="iconfont">&#xe718;</div>
+				<span>SEO外包</span>
+			</li>
+			<li>
+				<div class="iconfont">&#xe69d;</div>
+				<span>图纸设计</span>
+			</li>
+			<li>
+				<div class="iconfont">&#xe601;</div>
+				<span>广告推广</span>
+			</li>
+			<li>
+				<div class="iconfont">&#xe64c;</div>
+				<span>图标注册</span>
+			</li>
+			<li>
+				<div class="iconfont">&#xe8aa;</div>
+				<span>企业策划</span>
+			</li>
+		</ul>
+		<div class="reg_er">
+			<img src="<?=$g_static_path?>images/qr.jpg" />
+		</div>
+		<span class="reg_bottom">扫一扫关注，企鹅币满2000元取现</span>
+	</div>
+</div>
+
+
+
+<div id="footer">
+  <div class="f-promise">
+    <dl class="f-pro-quality">
+        <dt>货到付款</dt>
+        <dd>先收货再付款，放心购买</dd>
+      </dl>
+      <dl class="f-pro-spot">
+        <dt>50000现货</dt>
+        <dd>现货产品4点前下单当天发货</dd>
+      </dl>
+      <dl class="f-pro-free_shipping">
+        <dt>满500免运费</dt>
+        <dd>部分区域订单满500免运费</dd>
+      </dl>
+      <dl class="f-pro-invoice">
+        <dt>增值税专用发票</dt>
+        <dd>可提供增值税专用发票</dd>
+      </dl>
+      <dl class="f-pro-7returned">
+        <dt>7天无理由退换货</dt>
+        <dd>安心采购,售后无忧</dd>
+    </dl>
+  </div>
+</div>
+<div class="www">
+  <div id="footer-2013">  
+    <div class="copyright">Copyright &copy; <?=date('Y')?> <?=$g_sitename?> 版权所有</div>
+  </div>
+</div>
+</body>
+</html>

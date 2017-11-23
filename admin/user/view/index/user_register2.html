@@ -1,0 +1,142 @@
+<?
+session_start();
+include('../config.php'); 
+include('common.php');
+if($_COOKIE['IYUNTISITE_UUID']!='' || $_SESSION['ticket']==''){
+	echo "<script>location.href='$g_index'</script>";
+	exit();
+}
+
+$ticket=$_SESSION['ticket'];
+$sql="select * from `t_connect_wechat` where `site_id`='$g_siteid' and `ticket` = '$ticket'";
+$wechat_msg=$db->get_one($sql);
+
+//微信号是否已存在
+$sql="select * from `t_user` where `site_id`='$g_siteid' and `wechat_id` = '".$wechat_msg['wechat_id']."' limit 1";
+$exist=$db->get_one($sql);
+
+if($exist){
+	echo "<script>alert('该微信号码已经注册，请直接登录');location.href='".$g_domain."/member/login.php'</script>";
+	exit();
+}
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>新用户注册</title>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" /> 
+<link href="./css/register.css" rel="stylesheet" type="text/css"/ > 
+<?include('static.php');?>
+
+</head>
+
+
+<body> 
+<div class="w">
+  <div id="logo">
+	<a href="/" ><img src="./images/logo.png" width="170" height="60"/></a>
+	<b class="gerendenglu">新用户注册</b>
+	<div class="yijingzhuce">
+		<span class="span1">我已经注册，马上</span>
+		<a href="login.php" style="color:#ff4200;font-size:15px;">登录</a>
+	 </div>
+  </div>
+</div>
+<div style="width:90%;height:10px;border-bottom:1px solid #D2D2D2;margin:0 auto;"> 
+</div>
+
+<p style="width:480px;margin:0 auto;height:57px; text--align:center;background:url('images/register_process.png') 0 -56px no-repeat;margin-top:22px;"></p>
+
+<form action="do.php?ac=register" method="post" id='form'>
+<div class="divda">
+	<ul class="inputul">
+		<input type="hidden" name="ref" value="<?=req('ref')?>">
+		<input type="hidden" name="wechat_id" value="<?=$wechat_msg['wechat_id']?>"/>
+		
+		<li>
+			<div><span style="color:red;">*</span>&nbsp;用户名：</div>
+			<input class="inpu" type="text" name="username" id="username" size="35" placeholder="由数字，字母，下划线组成..."/>
+			<span class="pro" id="name"></span>
+		</li>
+		<li>
+			<div><span style="color:red;">*</span>&nbsp;密码：</div>
+			<input class="inpu" id="password" type="password" name="password" size="35" placeholder="由数字，字母，下划线组成..."/>
+			<span class="pro" id="mima"></span>
+		</li>
+		<li>
+			<div><span style="color:red;">*</span>&nbsp;确认密码：</div>
+			<input class="inpu" type="password" id="repassword" name="repassword" size="35" placeholder="再次确认您的密码..."/>
+			<span class="pro" id="remima"></span>
+		</li>
+		<li>
+			<div><span style="color:red;">*</span>&nbsp;手机号码：</div>
+			<input class="inpu" id="phone" type="text" name="phone" size="35" placeholder="手机号码..."/>
+			<span class="pro" id="pho"></span>
+		</li>
+		<li style="padding-bottom:20px;">
+			<div><span style="color:red;">*</span>&nbsp;验证码：</div>
+			<input class="inpu" type="text" id="authcode" name="authcode" style="width:130px;height:25px;"/>
+            <span class='imgyzm'>
+				<img id="yzm" style="height:34px;" src="./createyzm.php" onclick="this.src='./createyzm.php'"/>
+			</span>
+			<br/>
+			<input type="button" class="send1" value="免费获取短信动态码"/>
+		</li>
+		<li>
+			<div><span style="color:red;">*</span>&nbsp;短信动态码：</div>
+			<input class="inpu" type="text" name="dynamic_code"  size="35" />	
+		</li>
+		<!--li>
+			<div style="width:100%;text-align:center;">我已阅读并同意 <a href=''>会员注册协议</a> 和 <a href="">隐私保护政策</a>。</div>
+		</li-->
+		<li>
+			<input type="submit" class="zhuce" value=''/>
+		</li>
+	</ul>
+</div>
+</form>
+
+<div id="footer">
+  <div class="f-promise">
+    <dl class="f-pro-quality">
+        <dt>货到付款</dt>
+        <dd>先收货再付款，放心购买</dd>
+      </dl>
+      <dl class="f-pro-spot">
+        <dt>50000现货</dt>
+        <dd>现货产品4点前下单当天发货</dd>
+      </dl>
+      <dl class="f-pro-free_shipping">
+        <dt>满500免运费</dt>
+        <dd>部分区域订单满500免运费</dd>
+      </dl>
+      <dl class="f-pro-invoice">
+        <dt>增值税专用发票</dt>
+        <dd>可提供增值税专用发票</dd>
+      </dl>
+      <dl class="f-pro-7returned">
+        <dt>7天无理由退换货</dt>
+        <dd>安心采购,售后无忧</dd>
+    </dl>
+  </div>
+</div>
+<div class="www">
+  <div id="footer-2013">  
+    <div class="copyright">Copyright &copy; <?=date('Y')?> <?=$g_sitename?> 版权所有</div>
+  </div>
+</div>
+</body>
+</html>
+<script src="<?=$g_domain?>ajax/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="/member/js/register.js" charset=gb2312></script>
+<script type="text/javascript">
+
+$(function(){
+	$('form').submit(function(e){
+		if($('#name').html()!=''||$('#mima').html()!=''||$('#remima').html()!=''||$('#pho').html()!=''){
+			e.preventDefault();
+			alert('尚有资料没有完善，请完善资料。');
+		}
+	});	
+});
+</script>

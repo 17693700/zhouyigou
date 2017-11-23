@@ -1,0 +1,243 @@
+
+{include file="common/head_top"/}
+
+<div style="width:100%;height:124px;margin:0 auto;background:#F5E8D5;">
+	<a target=_black href="{$Think.config.domain}/brand-394" title="{$Think.config.sitename}" style="display:block;width:100%;height:100%;margin:0 auto;">
+		<img src="__static__/home/images/2017071404394918917.png" alt="加载失败" title="{$Think.config.sitename}" style="width:100%;height:100%"/>
+	</a>
+</div>
+
+<div id="header">
+    <div class="header-top">
+        <h1>
+	        <a href="{$Think.config.domain}" title="{$Think.config.sitename}">
+	           <img class="logo" src="__static__/common/images/logo.gif" alt="加载失败" title="{$Think.config.sitename}"/>
+			</a>
+	    </h1>
+
+		<div style="position:absolute;left:210px;top:10px;">
+			<img src="__static__/home/images/head_gif.gif" alt="{$Think.config.sitename}" title="{$Think.config.sitename}" />
+		</div>
+
+        <div class="slogan" style="padding-left:100px;">
+            <div id="searchDiv" class="nav-srh-index"> 
+				<form method="get" action="/search" id="search">
+					<table>
+						<tr>
+							<td style="position:relative">
+								<input class="search_input" autocomplete="off" style="color:#999999;border:2px solid #ff4200;width:460px;height:36px;box-sizing:border-box;padding-right:5px;padding-top:0px;padding-bottom:0px;margin:0px;" name="keywords" value="{$keywords ? $keywords : '请输入您要搜索的产品名称，型号...';}" type="text" onclick="if(this.value=='请输入您要搜索的产品名称，型号...') this.value='';">
+								<ul class="recommen" style="z-index:999999;">
+								</ul>
+								<div class="hot_words">
+									{foreach $hot_words as $val}
+										<a style="padding:0 4px;" href="{$Think.config.domain}/search?keywords={$val.keywords}">{$val.keywords}<s></s></a>
+									{/foreach}
+								</div>
+							</td>
+							<td>
+								<input type="submit" style="width:80px;height:38px;border:none;background-color:#ff4200;color:white;font-size:16px;letter-spacing:4px;cursor:pointer;margin-left:-5px;margin-top:0px;text-align:center;text-indent:12px;" value="搜索 ">
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>		
+		</div> 
+
+		<div class="qr-code1">
+			<img src="__static__/home/images/head_code1.gif" alt="{$Think.config.sitename}" title="{$Think.config.sitename}"/>
+		</div>
+
+		<div class="qr-code">
+			<img src="__static__/home/images/qr_code1.gif" alt="{$Think.config.sitename}" title="{$Think.config.sitename}" width="102" height="84" style="vertical-align: middle;"/>
+		</div>
+	</div>
+	
+<div class="nav-bg" style="height:34px;margin-top:20px;background:#FF4200;border-bottom: 2px solid #FF4200;">
+    <div class="nav" style="border-bottom:none;">
+        <div id="category" class="category">
+			<h2>
+				<a style="background:url(__static__/home/images/global.gif) no-repeat 155px 3px;background:none;" href="">全部分类</a>
+			</h2>
+			<div class="cate-list">
+				<UL id="J_category" auto="0">
+					<li id="pop_Category_0"> 
+						<div class="cate-item">
+							<h3>
+								<a href="{$Think.config.domain}/brand" target="_blank">品牌推荐</a>
+							</h3>
+							<span style="height:23px;">
+								<a href="{:url('index/Index/catalog','cat_id=0')}" target="_blank">进口轴承</a> 
+								<a href="{:url('index/Index/catalog','cat_id=0')}" target="_blank">国产轴承</a>   
+							</span>
+						</div>
+						<div class="cate-list-expand" >
+						    <div class="cate_list">
+								<div style="overflow:hidden;float:left;width:100px;">
+									<a href="{:url('index/Index/catalog','cat_id=0')}" target="_blank" style="border:none"><strong>进口轴承</strong></a> 
+								</div>
+								<p style="overflow:hidden;float:left;width:600px;">	
+									<a href="{:url('index/Index/catalog','brand_id=394')}" target="_blank">SKF轴承</a>
+									<a href="{:url('index/Index/catalog','brand_id=370')}" target="_blank">NSK轴承</a>
+									<a href="{:url('index/Index/catalog','brand_id=395')}" target="_blank">FAG轴承</a>
+									<a href="{:url('index/Index/catalog','brand_id=382')}" target="_blank">NTN轴承</a>
+									<a href="{:url('index/Index/catalog','brand_id=376')}" target="_blank">TIMKEN轴承</a>	
+									<a href="{:url('index/Index/catalog','brand_id=385')}" target="_blank">INA轴承</a>
+									<a href="{:url('index/Index/catalog','brand_id=373')}" target="_blank">KOYO轴承</a>
+									<a href="{:url('index/Index/catalog','brand_id=371')}" target="_blank">NACHI轴承</a>
+									<a href="{:url('index/Index/catalog','brand_id=375')}" target="_blank">IKO轴承</a>
+									<a href="{:url('index/Index/catalog','brand_id=372')}" target="_blank">NMB轴承</a>
+									<a href="{:url('index/Index/catalog','brand_id=376')}" target="_blank">GMN轴承</a>
+									<a href="{:url('index/Index/catalog','brand_id=368')}" target="_blank">MRC轴承</a>
+									<a href="{:url('index/Index/catalog','brand_id=380')}" target="_blank">THK轴承</a>
+									<a href="{:url('index/Index/catalog','brand_id=377')}" target="_blank">EASE轴承</a>
+									<a href="{:url('index/Index/catalog','brand_id=366')}" target="_blank">FYH轴承</a>
+									<a href="{:url('index/Index/catalog','brand_id=365')}" target="_blank">JAF轴承</a>
+									<a href="{:url('index/Index/catalog','brand_id=381')}" target="_blank">SAMICK轴承</a>
+									<a href="{:url('index/Index/catalog','brand_id=374')}" target="_blank">ASAHI轴承</a>
+									<a href="{:url('index/Index/catalog','brand_id=389')}" target="_blank">EZO轴承</a>
+									<a href="{:url('index/Index/catalog','brand_id=369')}" target="_blank">SNR轴承</a>
+								</p>
+								<div class="clr"></div>
+								<div style="border-bottom:1px dotted #ccc;padding-bottom:10px;">
+									<div style="overflow:hidden;float:left;width:100px;">
+										<a href="{:url('index/Index/catalog','cat_id=0')}" target="_blank" style="border:none"><strong>国产轴承</strong></a> 
+									</div>
+									<div style="overflow:hidden;float:left;width:600px;">
+										<a href="{:url('index/Index/catalog','brand_id=392')}" target="_blank">HRB轴承-哈尔滨</a>
+										<a href="{:url('index/Index/catalog','brand_id=358')}" target="_blank">洛阳轴承</a>
+										<a href="{:url('index/Index/catalog','brand_id=391')}" target="_blank">C&U轴承-人本</a>
+										<a href="{:url('index/Index/catalog','brand_id=347')}" target="_blank">TMB轴承-天马</a>
+										<a href="{:url('index/Index/catalog','brand_id=575')}" target="_blank">QC轴承-万向</a>
+									</div>
+								</div>
+							</div>
+							<div class="cate-list-right">
+								
+								<!--a href="" title="" target=_black>
+									<img src="" alt="加载失败" width="100" height="65"/>
+								</a-->
+							
+							</div>
+						</div>
+					</li>
+
+			    {foreach $top_catalog as $key01 => $val01}
+					<li id="pop_Category_{$key01+1}"> 
+						<div class="cate-item">
+							<h3>
+								<a href="{:url('index/Index/catalog','cat_id='.$val01.cat_id)}" target="_blank">{$val01.cat_name}</a>
+							</h3>
+							<span>
+							{foreach $val01['medium_catalog'] as $k => $val02}
+								{if $k < 5}
+								<a href="{:url('index/Index/catalog','cat_id='.$val02.cat_id)}" title="{$val02.cat_name}" target="_blank">
+									{$val02.cat_name}
+								</a>
+								{/if}
+							{/foreach} 
+							</span>
+						</div>
+
+						<div class="cate-list-expand"> 
+						<div class="cate_list">
+							{foreach $val01['medium_catalog'] as $val02}
+							<div style="border-bottom:1px dotted #ccc;padding-bottom:10px;margin-bottom:5px;">
+								<div style="overflow:hidden;float:left;width:120px;">
+									<a href="{:url('index/Index/catalog','cat_id='.$val02.cat_id)}" style="border:none" target="_blank">
+										<strong>{$val02.cat_name}</strong>
+									</a>
+								</div>
+				 
+								<div style="overflow:hidden;float:left;width:580px;">
+									{foreach $val02['small_catalog'] as $val03}
+									<a href="{:url('index/Index/catalog','cat_id='.$val03.cat_id)}" target="_blank">{$val03.cat_name}</a> 
+									{/foreach}
+								</div>
+								
+								<div class="clr"></div>
+							</div>
+							{/foreach}
+						</div>
+						<div class="cate-list-right">
+							{foreach $val01['brand_classify'] as $val_brand}
+							<a href="{:url('index/Index/catalog','brand_id='.$val_brand.brand_id)}" title="{$val_brand.brand_name}" target=_black>
+								<img src="{$Think.config.domain}__images__/{$val_brand.brand_ico}" alt="加载失败" width="100" height="65"/>
+							</a>
+							{/foreach}
+						</div>
+						</div>
+					</li>
+					{/foreach}
+				</ul>
+			</div>
+        </div>
+		<div class="nav-ezquote">
+			<a href="{$Think.config.domain}" class="nav-hot" >
+				首页
+			</a>
+		</div>
+    </div>
+	
+    </div>
+</div>
+<script type="text/javascript" src="__static__/common/js/jquery-3.2.1.min.js"></script>
+<script language="javascript">
+	function getCookie(name){
+		//js获取cookie
+	　　var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
+	　　if(arr != null){
+			location.href='/member/score_list.php';
+		}
+		else{
+			alert('请先登录！');
+			location.href='../../member/login.php';
+		}
+	}
+</script>
+<script language="javascript">
+	$(document).ready(function(){
+		
+		$("#J_category li").mouseover(function(){  
+			 $(".cate-list-expand",this).css("display","block");
+		});
+		$("#J_category li").mouseout(function(){  
+			 $(".cate-list-expand",this).css("display","none");
+		});
+ 
+		//搜索框实时获取数据
+		$('.search_input').keyup(function(event){
+			$('.recommen').empty();
+
+			$.ajax({
+				type: "POST",
+				url: "/member/do.php",
+				data: {ac:'search_ajax',val:$('.search_input').val()},
+				contentType:"application/x-www-form-urlencoded; charset=gb2312",
+				dataType: "text",
+				success: function(data){
+					$('.recommen').show();
+					data=eval('('+data+')'); //字符串转换json
+					var html = ''; 
+					$.each(data, function(commentIndex, comment){
+						html += '<a target=_black href="{$Think.config.domain}/thread-'+data[commentIndex]['goods_id']+'"><li><span style="background-color:#FF'+commentIndex+commentIndex+commentIndex+commentIndex+'">'+(commentIndex+1)+'</span>&nbsp;&nbsp;'+data[commentIndex]['goods_name']+'</li></a>';
+					});
+					$('.recommen')(html);
+					
+					 if(event.keyCode==38||event.keyCode==40){
+						$('.recommen a').eq(0).css("color","#FF4200")
+						if($('.recommen a')){
+					//		console.log(1)
+					//		$('.recommen a').eq(0).css({"color":"#FF4200","background":"#999"})
+						}else{
+					//		console.log(2)
+						}	
+					 }
+				}
+			}); 
+		});
+		$('.search_input').blur(function(){
+			$('.recommen').hide();
+		});
+	}); 
+	$('.hot_words a s').eq(0).css("opacity",0);
+</script>

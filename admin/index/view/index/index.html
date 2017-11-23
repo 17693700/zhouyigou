@@ -1,0 +1,147 @@
+﻿<!--_meta 作为公共模版分离出去-->
+{include file="common/_meta" /}
+
+<body>
+
+<!--_header 作为公共模版分离出去-->
+{include file="common/_header" /}
+
+<!--_menu 作为公共模版分离出去-->
+{include file="common/_menu" /}
+
+<section class="Hui-article-box">
+	<nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a> 
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">桌面</span> 
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div class="Hui-article">
+		<article class="cl pd-20">
+			<p class="f-20 text-success">欢迎使用H-ui.admin
+				<span class="f-14">v2.3</span>
+				后台模版！</p>
+			<p>上次登录时间：{$loginTime}</p>
+			<table class="table table-border table-bordered table-bg">
+				<thead>
+					<tr>
+						<th colspan="7" scope="col">信息统计</th>
+			</tr>
+					<tr class="text-c">
+						<th>统计</th>
+						<th>采购信息</th>
+						<th>报价信息</th>
+						<th>文章</th>
+						<th>用户</th>			</tr>
+		</thead>
+				<tbody>
+					<tr class="text-c">
+						<td>总数</td>
+						<td>{$infoCount}</td>
+						<td>{$offerCount}</td>
+						<td>{$articleCount}</td>
+						<td>{$userCount}</td>
+			</tr>
+					<tr class="text-c">
+						<td>今日</td>
+						<td>{$infoCountToday}</td>
+						<td>{$offerCountToday}</td>
+						<td>{$articleCountToday}</td>
+						<td>{$userCountToday}</td>
+			</tr>
+					<tr class="text-c">
+						<td>昨日</td>
+						<td>{$infoCountYesterday}</td>
+						<td>{$offerCountYesterday}</td>
+						<td>{$articleCountYesterday}</td>
+						<td>{$userCountYesterday}</td>
+			</tr>
+					<tr class="text-c">
+						<td>本周</td>
+						<td>{$infoCountWeek}</td>
+						<td>{$offerCountWeek}</td>
+						<td>{$articleCountWeek}</td>
+						<td>{$userCountWeek}</td>
+			</tr>
+					<tr class="text-c">
+						<td>本月</td>
+						<td>{$infoCountMonth}</td>
+						<td>{$offerCountMonth}</td>
+						<td>{$articleCountMonth}</td>
+						<td>{$userCountMonth}</td>
+			</tr>
+		</tbody>
+	</table>
+			<table class="table table-border table-bordered table-bg mt-20">
+				<thead>
+					<tr>
+						<th colspan="2" scope="col">服务器信息</th>
+			</tr>
+		</thead>
+				<tbody>
+					<tr>
+						<th width="30%">服务器计算机名</th>
+						<td><span id="lbServerName">{$serverName}</span></td>
+			</tr>
+					<tr>
+						<td>服务器IP地址</td>
+						<td>{$serverIp}</td>
+			</tr>
+					<tr>
+						<td>服务器域名</td>
+						<td>{$serverDomain}</td>
+			</tr>
+					<tr>
+						<td>服务器端口 </td>
+						<td>{$serverPort}</td>
+			</tr>
+					<tr>
+						<td>服务器操作系统 </td>
+						<td>{$serverType}</td>
+			</tr>
+					<tr>
+						<td>系统所在文件夹 </td>
+						<td>{$thisFile}</td>
+			</tr>
+					<tr>
+						<td>服务器的语言种类 </td>
+						<td>{$serverLanguage}</td>
+			</tr>
+					<tr>
+						<td>服务器当前时间 </td>
+						<td>{$serverDate}</td>
+			</tr>
+					<tr>
+						<td>服务器剩余空间 </td>
+						<td>{$serverFree}</td>
+			</tr>
+					<tr>
+						<td>服务器脚本超时时间 </td>
+						<td>{$serverTime}</td>
+			</tr>
+					<tr>
+						<td>PHP版本 </td>
+						<td>{$phpVersion}</td>
+			</tr>
+					<tr>
+						<td>Apache版本 </td>
+						<td>{$apacheVersion}</td>
+			</tr>
+		</tbody>
+	</table>
+</article>
+<footer class="footer"> 
+	本后台系统由<a href="http://www.h-ui.net/" target="_blank" title="H-ui前端框架">H-ui前端框架</a>提供前端技术支持</p>
+</footer>
+</div>
+</section>
+
+<!--_footer 作为公共模版分离出去-->
+{include file="common/_footer" /}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+
+</body>
+</html>

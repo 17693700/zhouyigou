@@ -1,0 +1,576 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<HTML xmlns="http://www.w3.org/1999/xhtml">
+<head id="headerCtrl">
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title><?=$detail['goods_name']?> - <?=$g_sitename?></title> 
+<meta name="Keywords" content="<?=$detail['page_keywords']?>" />
+<meta name="Description" content="<?=$detail['page_description']?>" />
+<link href="/favicon.ico" rel="shortcut icon">
+<link href="./images/thread.css?=v" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="/ajax/jquery-3.1.1.min.js"></script>
+<!--layer弹出层插件-->
+<script type="text/javascript" src="/ajax/layer/layer.js"></script>
+<script type="text/javascript" src="/member/plugin.php?cmd=browse&goods_id=<?=$detail_id?>"></script>
+<script type="text/javascript" src="<?=$g_static_path?>js/thread.js"></script>
+<!--图片放大效果-->
+<script src="<?=$g_static_path?>js/large_image_js/MagicZoom.js" type="text/javascript"></script>
+<?include(load_user_diy('static.php'));?>
+<script language="javascript">
+//询价框
+function enquiry_price(){
+	<?if($_COOKIE['IYUNTISITE_UUID']!=''){?>
+		var sub='';
+		sub+='<div class="enquiry_div">';
+		sub+='<img src="<?=$goods_image_detail?>" width="90" height="90" align="top"/>';
+		sub+='<span class="enquiry_goods_name"><?=$detail['goods_name']?></span>';
+		sub+='<span class="enquiry_price">价格：<font color="#ff6600">￥<?=$detail['real_price']?></font></span>';
+		sub+='</div><br/>';
+		sub+='<form class="enquiry_form" method="post" onsubmit="ale();" action="/member/do.php?ac=enquiry_price">';
+		sub+='<input type="hidden" name="goods_id" value="<?=$detail['goods_id']?>">';
+		sub+='<input type="hidden" name="shop_id" value="<?=$shop_home['shop_id']?>">';
+		sub+='<input type="hidden" name="enquiry_type" value="one">';
+		sub+='心理价位：<input type="text" name="enquiry_price"><br/><br/>';
+		sub+='您的姓名：<input type="text" name="username">&nbsp;&nbsp;';
+		sub+='<input type="radio" name="sex" value="先生" checked="checked">&nbsp;先生&nbsp;&nbsp;<input type="radio" name="sex" value="女士">&nbsp;女士<br/><br/>';
+		sub+='手机号码：<input type="text" name="mobile"><br/><br/>';
+		sub+='备注说明：<textarea name="remark"></textarea>&nbsp;&nbsp;信息提交后我们会尽快联系您<br/><br/>';
+		sub+='<input type="submit" class="sub" value="提交">';
+		sub+='</form>';
+
+		layer.open({
+			type: 1,
+			title:"议价：",
+			area: ['550px', '470px'],
+			shadeClose: true,
+			content: '\<\div style="padding:20px;">'+sub+'\<\/div>'
+		});
+	<?}else{?>
+		alert('请登录后再询价!');
+		window.open("/member/login.php");
+	<?}?>
+}
+</script>
+</head>
+<style>
+
+</style>
+<body> 
+  <div style="display:none"><?=$detail['summary']?></div>
+  <?include(load_user_diy ('head.php'));?>
+  <script>
+	$('.cate-list').css('display','none');
+
+	$(".category").mouseover(function(){  
+		 $('.cate-list').css("display","block");
+	});
+	$(".category").mouseout(function(){  
+		 $('.cate-list').css("display","none");
+	}); 
+  </script>
+  <div id="wrap"> 
+<div class="w980" style="border-bottom:1px solid #efefef;">
+	<div style="padding:10px 0px 10px 0px;">
+		<a href="<?=$g_domain?>">首页</a>
+		<?
+		$boot_cat_id = '';
+		if(notnull($this_parent_catalog)){ 
+			$max_level = sizeof($this_parent_catalog) -1;  
+			for($i=$max_level; $i>=0; $i--){ //倒序
+		?>
+				&gt; <a href="<?=$g_domain?>catalog-<?=$this_parent_catalog[$i]['cat_id']?>.html"><?=$this_parent_catalog[$i]['cat_name']?></a> 
+		<? 
+				$boot_cat_id = $this_parent_catalog[$i]['cat_id'];
+			} 
+		}
+		?>
+	</div>
+</div>
+
+<div class=" w980">
+	<div style="float:left; width:500px;">
+		<div>
+	
+			<div class="clearfix" id="tsShopContainer" style="margin-top:10px;">
+				<div id="tsImgS">
+					<a href="<?=$goods_image_detail?>" class="MagicZoom" id="MagicZoom">
+						<img width="350" height="330" src="<?=$goods_image_detail?>" onerror="this.src='<?=$g_default_goods_img?>'"/>
+					</a>
+				</div>
+				<div id="tsPicContainer">
+					<div id="tsImgSArrL" onclick="tsScrollArrLeft()"></div>
+					<div id="tsImgSCon" style="width:500px;">
+						<ul>
+							<li onclick="showPic(0)" rel="MagicZoom" class="tsSelectImg">
+								<img src="<?=$goods_image_detail?>" width="50" height="50" onerror="this.src='<?=$g_default_goods_img?>'" tsImgS="<?=$goods_image_detail?>" />
+							</li>
+						<?  
+						if(notnull($thread_image)){
+							foreach ($thread_image as $val){ 
+								$other_image = "/upfiles/$g_siteid/".$val['filepath'];
+								$i++;
+						?>  						
+							<li onclick="showPic(<?=$i+1?>)" rel="MagicZoom">
+								<img src='<?=$other_image?>' width="60" onerror="this.src='<?=$g_default_goods_img?>'" tsImgS="<?=$other_image?>" />
+							</li>
+						<?
+							}
+						}
+						?> 
+						</ul>
+					</div>
+					<div id="tsImgSArrR" onclick="tsScrollArrRight()"></div>
+
+					<script src="<?=$g_static_path?>js/large_image_js/ShopShow.js"></script>
+					
+				</div>
+			</div> 
+	
+			<div class="bdsharebuttonbox">
+				<p>
+					<a href="javascript:;" style="background:none; color:#999999;" class="bds_more" data-cmd="more">
+						<span><img src="<?=$g_static_path?>images/partook.png" align="bottom"/> 分享</span>
+					</a>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<a href="javascript:;" onclick="add_collection('goods',<?if($shop_home['shop_id']){echo $shop_home['shop_id'];}else{echo 0;}?>,<?=$detail['goods_id']?>,<?if($_COOKIE['IYUNTISITE_UUID']){echo $_COOKIE['IYUNTISITE_UUID'];}else{echo 0;}?>);">
+						<span><img src="<?=$g_static_path?>images/collection.png" align="bottom"/> 收藏商品</span>
+					</a>
+					<div style="display:none;padding:20px;" id="and_like">
+						<br/>
+						<span style="color:#808080;">猜你喜欢：</span>
+						<br/>
+						<? 							
+						if(notnull($guess_list)){ 
+							foreach ($guess_list as $key=>$val){ 
+								if($key < 3  &&  $val['goods_id'] != $detail['goods_id']){ 
+									$goods_image = "/upfiles/$g_siteid/".$val['goods_image'];
+						?>
+						<div style="width:150px;margin-top:10px;margin-left:11px;float:left;">
+							<a href="<?=$g_domain?>thread-<?=$val['goods_id']?>.html" target="_blank">
+							<img src="<?=$goods_image?>" width="150" style="border:1px solid #ccc;padding:2px;" onerror="this.src='<?=$g_static_path?>/images/nopic.jpg'"/>
+							<p><?=$val['goods_name']?></p> 
+							<span class="price">价格：<?if($detail['real_price']=='999' || $detail['real_price']=='0'){?><b style="color:red">会员可见</b><?}else{?><strong style="color:#FF6600;font-size:16px;">￥<?=number_format($val['real_price'], 2, '.', '');?></strong><?}?></span>
+							</a>
+						</div>
+						<?}}}?> 
+					</div>
+					
+				</p>
+			</div>
+			<script>
+				window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","qzone","tsina","bdysc","weixin","renren","tqq","bdxc","kaixin001","tqf","tieba","douban","bdhome","sqq","youdao","mail","isohu","ty","copy","print"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+			</script>
+			
+		</div> 
+	</div>
+	<div style="float:left;width:500px;position:relative; ">
+		
+		<div class="code_app">
+			<img src="<?=$g_static_path?>images/code_appbox.png"/>
+			<div class="code_app_img">
+			<?
+			// 二维码
+			qr_code(100);
+			?>手机购买优惠多
+			</div>
+		</div>
+		<div style="padding:10px 0 10px 0;font-size:14px;line-height:1.8;"> 
+			  <li style="font-size:18px;font-family:微软雅黑;font-weight:bold;">
+				<a href="<?=$g_domain?>thread-<?=$detail['goods_id']?>.html"><?=$detail['goods_name']?></a>
+			  </li>
+			  <li style="color:#FF4200;">原装正品&nbsp;&nbsp;假一赔十&nbsp;&nbsp;现货销售&nbsp;&nbsp;拍下即发</li>
+			  <li>价　　格：
+			  <?if($detail['real_price']=='999' || $detail['real_price']=='0'){?>
+				<b style="color:red;font-size:22px;font-family:微软雅黑;">会员可见</b>
+			  <?}else{?>
+				  <span class="price" style="font-size:24px;color:#ff6600">
+				  ￥
+					<span id="real_price_box">
+					  <?=number_format($detail['real_price'], 2, '.', '');?>
+					</span>
+					<span class="real-price" style="color:#666;font-size:12px;text-decoration: line-through;">门店价格：</span>
+				  </span>
+			  </li>
+			  <?}?>
+		      
+			  <input type="hidden" id="src_real_price" value="<?=$detail['real_price']?>">
+		      <input type="hidden" id="real_price" name="real_price" value="<?=$detail['real_price']?>">
+
+			  <li style="display:none">物流运费：
+			  <?if($is_traffic=='1'){?>
+				  运送到<?=$g_user_region?> / <?=$traffic_weight/1000?>kg / 运费￥<b><?=$express_price?></b>元
+			  <?} else {?>
+				  买家免运费，由商家承担运费
+			  <?}?>
+			  </li>  
+			  <li>销　　量：已售出 <?=$detail['sale_number']?> 件</li>
+			  <li>库　　存：现货</li>
+			  <li>商品人气：<?=$detail['clicks']?>  次关注</li>
+			 
+			  <?if($detail['jg1']>0 && $detail['jg2']>0){?>
+			  <ul class="goods_price"> 
+
+				  <input type="hidden" class="v_field_item" id="v_field_item_jg" name="v_field_item_jg" value="">
+
+				  <input type="hidden" id="v_f_jg" name="v_f_jg" value="">
+
+				  <li class="selftypeof">
+				    <span class="label"> 选择价格：</span>
+					<div class="options"> 
+					  <ul id="fjg">
+						<li><a href="javascript:void(0)" onclick="jg(this, 'jg', '<?=$detail['jg1']?>', '选择价格', '含税价');">含税价</a></li>
+						<li><a href="javascript:void(0)" onclick="jg(this, 'jg', '<?=$detail['jg2']?>', '选择价格', '不含税价');">不含税价</a></li>
+					  </ul>
+					</div> 
+				  </li> 
+		      </ul>
+			  <?}?>
+			  <div class="clr"></div> 
+			  <li>
+					购买数量：
+				    <input id="min1" alt="减少一件" class="addreduce" type="button" value="-" onclick="min1();">
+					<input type="text" class="text width1" name="buy_number" id="qty" value="1">
+					<input id="add1" alt="增加一件" class="addreduce" name="" type="button" value="+" onclick="add1();">
+					<input type="hidden" name="whouse_id" id="whouse_id" value="">
+					<span style="background:#FF7A00;color:#fff;font-size:12px;padding:3px 5px;">一天前更新，请与客服确认后下单付款</span>
+			</li>
+			  <li style="padding-top:15px">
+				<a href="javascript:buycart(<?=$detail['shop_id'];?>,<?=$detail['goods_id']?>)" style="width:auto;height:auto;">
+					<img src="<?=$g_static_path?>/images/buynow.gif"/>
+				</a> 
+				<a href="javascript:buycart(<?=$detail['shop_id'];?>,<?=$detail['goods_id']?>)">
+					<img src="<?=$g_static_path?>/images/addtocart.gif"/>
+				</a> 
+				<div onclick="enquiry_price();" class="enquiry" style="background-color:#0F9BFF;">
+					<img style="margin-top:-2px;" align="center" src="<?=$g_static_path?>images/enquiry.png"> 点击询盘
+				</div> 
+			    <?if($g_config['show_taobao_url']=='1' && $detail['outer_url']!=''){?>
+				<a href="<?=$detail['outer_url']?>" target="_blank"><img src="/common/icon/taobao_buy.gif"/></a>
+			    <?}?> 
+			  </li> 
+			   <li class="pay-img" style="margin-top:20px;">承　　诺：
+				<div class="pay-div">
+					<img src="<?=$g_static_path?>images/ico_cn1.png"/>
+					<span>工厂直销</span>
+				</div>
+				<div class="pay-div">
+					<img src="<?=$g_static_path?>images/ico_cn2.jpg"/>
+					<span> 7天无条件</span>
+				</div>
+				<div class="pay-div">
+					<img src="<?=$g_static_path?>images/ico_cn3.png"/>
+					<span>30天调换</span>
+				</div>
+				<div class="pay-div">
+					<img src="<?=$g_static_path?>images/ico_cn4.png"/>
+					<span>一年保修</span>
+				</div>
+			  </li>    
+			   <li class="pay-img">支　　付：
+			   <div class="pay-div">
+					<img src="<?=$g_static_path?>images/ico_pay1.jpg" style="width:23px;height:20px;">
+					<span>支付宝在线</span>
+				</div>
+				<div class="pay-div">
+					<img src="<?=$g_static_path?>images/ico_pay2.jpg"/>
+					<span>微信扫码</span>
+				</div>
+				<div class="pay-div">
+					<img src="<?=$g_static_path?>images/ico_pay.jpg"/>
+					<span>对公转帐&nbsp;&nbsp;货到付款&nbsp;&nbsp;分期付款</span>
+				</div>
+				
+			  </li> 
+			  
+		</div> 
+	</div> 
+	<div class="clr"></div>  
+</div> 
+
+<div class=" w980">
+	<div style="float:left;width:190px;text-align:center;">
+		<div style="padding-top:16px"></div>
+			<!--广告-->
+			<div id="slideBox" class="slideBox">
+	            <div class="hd">
+	                <ul>
+						<?foreach($adv_banner as $val){?>
+						<li></li>
+						<?}?>
+	                </ul>
+	            </div>
+	            <div class="bd">
+	                <ul>
+						<?foreach($adv_banner as $val){?>
+						<li>
+	                    	<a href="<?=$val['link']?>" target=_black title="<?=$val['remark']?>">
+	                    		<img src="<?=$g_domain?>upfiles/9558/<?=$val['image']?>" alt="<?=$val['remark']?>">
+	                    	</a>
+	                    </li>
+						<?}?>               
+	                </ul>
+	            </div>
+	        </div>
+			<?if($detail['brand_ico']){?>
+			<div class="pinpaisq">
+	        	<div class="pinpaima">
+		        	<img src="<?=$g_domain?>upfiles/9558/<?=$detail['brand_ico']?>" alt="NSK" >
+		        </div>
+		        <p class="sq"><?=$detail['brand_name']?>品牌授权</p>
+		        <ul>
+		            <li>原装正品</li>
+		            <li>库存充足</li>
+		            <li>种类齐全</li>
+		            <li>售后无忧</li>
+		        </ul>
+	        </div>
+			<?}?>
+		<div class="shop_message">
+			<div class="shop_message_top">
+				<!--<span><b><? if($shop_home['shop_name']){echo $shop_home['shop_name'];}else{echo '三九官方直营店';}?></b></span>-->
+				<div class="shop_message_top_div">
+					<img src="<?=$g_static_path?>images/shop_ico/cheng.png" title="诚信商家" align="center" style="margin-top:-2px;">&nbsp;
+					<font class="nianxian" color="red">2</font>年
+					<div>
+						<img src="<?=$g_static_path?>images/shop_ico/baozhang.png" title="买家保障"/>&nbsp;
+						<img src="<?=$g_static_path?>images/shop_ico/shenfenrenzheng.png" tytle="企业身份认证"/>
+					</div>
+				</div>
+			</div>
+			<ul class="shop_message_middle">
+				<li>联系商家:&nbsp;<a href="<?=$href_qq?>" target=_black>
+				<? if($contacts['customer_service_name']){echo $contacts['customer_service_name'];}else{echo '三九客服';}?>&nbsp;
+				<img src="<?=$g_static_path?>images/custom_service.png" align="center"></a></li>
+				<!--<li>企业官微:&nbsp;<a href="javascript:0;"><img src="<?=$g_static_path?>images/shop_ico/weiborenzheng.png"></a></li>
+				<li>满&nbsp;意&nbsp;度:&nbsp;<a href="javascript:0;"><?=$avg_comment_mark2?></a></li>
+				<li>交易勋章:&nbsp;
+					<a href="javascript:0;">
+						<img src="<?=$g_static_path?>images/shop_ico/jiaoyixunzhang.png">
+					</a>
+				</li>-->
+				<li>供应等级:&nbsp;
+					<a href="javascript:0;">
+						<img src="<?=$g_static_path?>images/shop_ico/gongyingdengji.png">
+						<img src="<?=$g_static_path?>images/shop_ico/gongyingdengji.png">
+						<img src="<?=$g_static_path?>images/shop_ico/gongyingdengji.png">
+						<img src="<?=$g_static_path?>images/shop_ico/gongyingdengji.png">
+						<img src="<?=$g_static_path?>images/shop_ico/gongyingdengji.png">
+					</a>
+				</li>
+				<!--<li>经营模式:&nbsp;<? if($shop_home['shop_name']){echo '生产厂家';}else{echo '官方直营';}?></li>
+				<li>所在地区:&nbsp;<? if($contacts['address']){echo $contacts['address'];}else{echo '上海';}?></li>-->
+			</ul>
+			<!--<div class="shuju_div">
+				<div>描述<br/><font color="red"><?=$avg_comment_mark1?></font></div>
+				<div>服务<br/><font color="red"><?=$avg_comment_mark2?></font></div>
+				<div>发货<br/><font color="red"><?=$avg_comment_mark3?></font></div>
+				<div>回头率<br/><font color="red"><?=rand(11,30)?>%</font></div>
+			</div>
+			<a class="shop_a join" href="/shop<?=$shop_home['shop_id']?>/" target="_black">进入店铺</a>
+			<a class="shop_a collect" href="javascript:;" onclick="add_collection('shop',<?if($shop_home['shop_id']){echo $shop_home['shop_id'];}else{echo 0;}?>,0,<?if($_COOKIE['IYUNTISITE_UUID']){echo $_COOKIE['IYUNTISITE_UUID'];}else{echo 0;}?>);">收藏店铺</a>-->
+		</div>
+		<div class="shop_goods_top">产品搜索 ▼</div>
+		<div class="goods_search">
+			<form action="/search" method="get">
+				<input type="hidden" name="shop_id" value="<?=$shop_home['shop_id']?>"/>
+				<span>名称：</span><input type="text" name="keywords" size='15'/><br/>
+				<span>价格：</span><input type="text" name="sp" size='3' placeholder="&yen;"/>&nbsp;_&nbsp;<input type="text" name="ep" size='3' placeholder="&yen;"/><br/>
+				<input type="submit" value="提交" style="width:74px;margin-left:47px;cursor:pointer;">
+			</form>
+		</div>
+		
+		<div class="shop_goods_top">产品推荐 ▼</div>
+		<?   	
+		if(notnull($guess_list)){ 
+			foreach ($guess_list as $val){ 
+				if($val['goods_id'] != $detail['goods_id']){
+					$goods_image = "/upfiles/$g_siteid/".$val['goods_image'];
+		?>
+		<div style="width:160px;margin-top:10px;margin-left:11px;">
+			<a href="<?=$g_domain?>thread-<?=$val['goods_id']?>.html" target="_blank">
+			<img src="<?=$goods_image?>" width="100%" style="border:1px solid #ccc;padding:2px;" onerror="this.src='/images/nopic.jpg'"/>
+			<p><?=$val['goods_name']?></p> 
+			<span class="price">价格：<?if($detail['real_price']=='999'){?><b style="color:red">会员可见</b><?}else{?><strong style="color:#FF6600;font-size:16px;">￥<?=number_format($val['real_price'], 2, '.', '');?></strong><?}?></span>
+			</a>
+		</div>
+		<? 
+				}
+			}
+		}
+		?> 
+			
+		<div class="lazy-ajax" >
+	        	<div class="area-head">
+	        		<h3>相关分类</h3>
+	        	</div>
+	        	<ul class="procon-relate">
+					<?foreach($catalog_about as $val):?>
+					<li>
+	        			<a target="_blank"  href="<?=$g_domain?>catalog-<?=$val['cat_id']?>.html"><?=$val['cat_name']?></a>
+	        		</li>
+					<?endforeach;?>
+	        	</ul>
+	        </div>
+	        
+	         <div class="lazy-ajax" >
+	        	<div class="area-head">
+	        		<h3>相关品牌</h3>
+	        	</div>
+	        	<ul class="procon-relate">
+	        		<?foreach($brand_about as $val):?>
+					<li>
+	        			<a target="_blank"  href="<?=$g_domain?>brand-<?=$val['brand_id']?>.html"><?=$val['brand_name']?></a>
+	        		</li>
+					<?endforeach;?>
+	        	</ul>
+	        </div>
+		<div style="padding:5px;padding-top:15px;margin-top:30px;text-align:left;background-color:#f1f1f1;text-align:center;">
+		<?
+		// 二维码
+		qr_code(100);
+		?>
+		<br/>手机扫描商品二维码
+		</div>
+	</div> 
+	<div style="float:left;width:1010px;">
+		<div style="padding-top:15px"></div>    
+		<?include(load_user_diy('thread.tabs.php'));?>
+	</div>
+	
+	<div class="clr"></div> 
+</div>
+</div>
+
+<div class="clr"><br/><br/></div> 
+<p style="width:1200px;text-align:left;margin:0 auto;">  
+	  <?
+	  if(notnull($friendlink)){
+		  echo '友情链接：';
+		  foreach ($friendlink as $val){ 
+	  ?>
+	  <a style="padding:0 10px;color:#666;" href="<?=$val['link_url']?>" title="<?=$val['link_title']?>" target="_blank"><?=$val['link_title']?></a>
+	  <?
+		  }
+	  }
+	  ?>
+</p>
+<br/>
+<p style="text-align:center;margin-bottom:12px;"><img src="<?=$g_static_path?>images/end.png"></p>
+<?include(load_user_diy('foot.php'));?> 
+</body>
+</html>
+<style>
+.addreduce{
+	width: 20px;
+    height: 26px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+.text.width1{
+	width:50px;
+}
+
+.pay-div{width:auto;display:inline-block;position:relative;cursor:pointer;}
+.pay-div span{margin-left:25px;}
+.pay-div img{position:absolute;left:0;top:2px;}
+ @keyframes mymove{
+	 0{top:2px}50%{top:-3px}100%{top:2px}
+ }
+.pay-div:hover img{animation:mymove .2s 1;}
+.box{
+	width:190px;
+	height:auto;
+	overflow: hidden;
+	
+}
+
+</style>
+<script> 
+	var num=$('.width1').val();
+	function add1(){
+		num++;
+		$('.width1').val(num);
+		$('#whouse_id').val(num);
+	}
+	function min1(){
+		if(num<=1){
+			return;
+		}else{
+			num--;
+			$('.width1').val(num);
+			$('#whouse_id').val(num);
+		}	
+	}
+$(function(){
+
+	var price=($('#src_real_price').val()*1.2).toFixed(2);
+	$('.real-price').html('门店价格：'+price)
+	 var nian=Math.floor(Math.random()*3+1)
+	 $(".nianxian").html(nian)
+	 
+		var now=0;
+		var next=0;
+		var flag=true;
+		var imgs=$(".bd ul li");
+		var yuan=$(".hd ul li");
+		var t=setInterval(move,5000);
+		imgs.css({opacity:0});
+		imgs.eq(0).animate({opacity:1});
+		yuan.eq(0).css("background","#EC6300");
+		function move(){
+			if(flag==false){
+				 return
+				}
+				flag=false;
+			 next++;
+			  if(next==imgs.length){
+				next=0
+			  }
+			  imgs.eq(now).animate({opacity:0})
+			  .end().eq(next).animate({opacity:1},function(){
+			  flag=true;
+			});
+			 yuan.css("background","#fff")
+			  .eq(next).css("background","#EC6300")
+			  now=next;
+
+		}
+		function movel(){
+			if(flag==false){
+				 return
+				}
+				flag=false;
+			 next--;
+			  if(next<0){
+				next=imgs.length-1
+			  }
+			  imgs.eq(now).animate({opacity:0})
+			  .end().eq(next).animate({opacity:1},function(){
+				flag=true
+			  })
+			  yuan.css("background","#fff")
+			  .eq(next).css("background","#EC6300");
+			  now=next;
+
+		}
+		yuan.click(function(){
+			if(flag==false){
+				  return
+			  }
+			  flag=false;
+			var index=$(this).index()
+			
+			imgs.eq(now).animate({opacity:0})
+			imgs.eq(index).animate({opacity:1},function(){
+				flag=true
+			})
+			yuan.css("background","#fff");
+			$(this).css("background","#EC6300");
+			now=index;
+			next=index;
+
+		})	
+		
+	 
+	})
+
+</script>

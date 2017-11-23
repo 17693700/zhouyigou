@@ -1,0 +1,166 @@
+<?
+session_start();
+include('../config.php');
+include('common.php');
+include('../o2o/9558/qr_code.php');
+
+if($_COOKIE['IYUNTISITE_UUID']!=''){
+	gourl($g_index);
+	exit();
+}
+else{
+	include('connect.head.php');
+} 
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312"/>
+<link href="./css/login.css" rel="stylesheet" type="text/css" />
+<script src="/ajax/jquery-3.1.1.min.js"></script>
+<title>欢迎登录</title>
+</head>
+<body>
+<script>
+//定时查看用户是否扫描二维码
+window.setInterval(connect_wechat,3000);
+function connect_wechat(){
+	$.ajax({
+		type: "POST",
+		url: "do.php",
+		data: {ac:'wechat_login_ajax',ticket:'<?=$ticket?>'},
+		dataType: "text",
+		success: function(data){
+			if(data!=0){
+				var href="do.php?ac=login&wechat_id="+data+"&from_url=<?=getenv("HTTP_REFERER")?>";
+				location.href=href;
+			} 
+		}
+	});
+}
+</script>
+
+<div class="w">
+  <div id="logo">
+	<a href="/" ><img src="./images/logo.png" width="170" height="60"/></a>
+	<b class="gerendenglu" style="display:inline-block;">个人登录</b>
+	<div class="lianxidianhua">
+		<span class="span1"><img src="images/lianxidianhua.png">&nbsp;客服热线 021-62399998</span>
+		<span class="span2">工作时间 9:00-18:00</span>
+	 </div>
+  </div>
+</div>
+
+<div class="login_box">
+<form id="login_form" method="post" action="do.php?ac=login">
+	<input type="hidden" name="from_url" value="<?=getenv("HTTP_REFERER")?>" />
+	<div class="w1" id="entry"> 
+		<div class="mc" id="bgDiv">
+		    <ul class="mc_title">
+				<li>扫码登录</li>
+				<li>账户登录</li>
+			</ul>
+			<div class="mc_list">
+			    <div class="mc_img">
+					<img src='https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=<?=urlencode($ticket)?>'/>
+				</div>
+				<div style="width:100%;height:50px;line-height:50px;text-align:center;font-size:20px;margin-bottom:10px;">微信扫码，安全登录</div>
+				<div class='third_party_login'>
+					<span style="color:#999999;">————&nbsp;&nbsp;&nbsp;&nbsp;使用以下账号登录&nbsp;&nbsp;&nbsp;&nbsp;————</span>
+					<div>
+						<!--a class='qq_login' onclick='QC.Login.showPopup({ appId:"101344939", redirectURI:"http://www.999zcw.com"});' href="javascript:void(0);"></a-->
+						<!--a class='weibo_login' id="wb_connect_btn" href="javascript:void(0);"></a-->
+						<?include("connect.common.php");?>
+					</div>
+				</div>
+			</div>
+			<div class="form mc_list">
+				<div class="item fore1"> 
+					<span>用户名：</span>
+					<div class="item-ifo">
+					<input type="text" placeholder='' id="id_username" name="username" class="text" tabindex="1"/>
+					</div>
+				</div>  
+				<div class="item fore2"> 
+					<span>密 码：</span>
+					<div class="item-ifo"> 
+					<input type="password" id="id_password" name="password" class="text" tabindex="2"/> 
+				</div>
+			</div>
+			<input type="hidden" name="ref" value="<?=req('ref')?>">
+			<div class="item fore3 block" id="o-authcode"> <span>验证码</span>
+			<div class="item-ifo">
+				<input type="text" id="authcode" class="text text-1" name="authcode" tabindex="6" style="ime-mode:disabled"/>
+				<label class="img">
+					<img id="yzm" style="height:34px;" src="./createyzm.php" border="0" onclick="this.src='./createyzm.php'"/>
+				</label>
+				<label class="hline">
+					<a href="javascript:void(0);" class="flk13" onclick="document.getElementById('yzm').src='./createyzm.php'">换一张</a>
+				</label>
+			</div>
+        </div>
+        <div class="item fore4" id="autoentry">
+			<div class="item-ifo">
+				<input type="checkbox" name="autologin"/><span>自动登录</span>
+				<a style="display:block;margin-top:-21px;margin-left:80px;text-decoration:none;" href="javascript:alert('请联系商家服务中心！')" class="" ><span>忘记密码?</span></a>
+				<div class="clr"></div>
+				<a style="display:block;color:#999999;margin-top:-23px;margin-left:230px;text-decoration:none;width:70px;" href="register.php">免费注册</a>
+			</div> 
+        </div>
+        <div class="item login-btn2013">
+			<button class="login-entry" id="loginsubmit" tabindex="8" >登录</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+</div>
+
+
+<div id="footer">
+  <div class="f-promise">
+    <dl class="f-pro-quality">
+        <dt>货到付款</dt>
+        <dd>先收货再付款，放心购买</dd>
+      </dl>
+      <dl class="f-pro-spot">
+        <dt>50000现货</dt>
+        <dd>现货产品4点前下单当天发货</dd>
+      </dl>
+      <dl class="f-pro-free_shipping">
+        <dt>满500免运费</dt>
+        <dd>部分区域订单满500免运费</dd>
+      </dl>
+      <dl class="f-pro-invoice">
+        <dt>增值税专用发票</dt>
+        <dd>可提供增值税专用发票</dd>
+      </dl>
+      <dl class="f-pro-7returned" style="margin-right:none;">
+        <dt>7天无理由退换货</dt>
+        <dd>安心采购,售后无忧</dd>
+    </dl>
+  </div>
+</div>
+<div class="www">
+  <div id="footer-2013">  
+    <div class="copyright">Copyright &copy; <?=date('Y')?> <?=$g_sitename?> 版权所有</div>
+  </div>
+</div>
+ 
+</body>
+</html>
+<script>
+$(function(){
+		 console.log($('.mc_title li').length);
+		 $('.mc_list').eq(1).css('display','none');
+		 $('.mc_title li').eq(0).css('color','#FF4200');
+		  $('.mc_title li').on('click',function(){
+			  var index=$(this).index()
+			  $('.mc_title li').css('color','#666');
+			  $(this).css('color','#FF4200');
+			  $('.mc_list').css('display','none');
+			  $('.mc_list').eq(index).css('display','block');
+		  })
+		
+	})
+</script>

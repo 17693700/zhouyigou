@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="Keywords" content="" />
+		<meta name="Description" content="" />
+		<meta name="location" content="province=上海;city=上海">
+		<meta name="author" content="{$Think.config.sitename}" />
+		<meta name="copyright" content="2017(C) {$Think.config.sitename} 版权所有" />
+		<link rel="stylesheet" href="__static__/home/css/floor.css" />
+		<script src="__static__/common/js/jquery-3.2.1.min.js"></script>
+		<script src="__static__/home/js/index.js"></script>
+	</head>
+	<body>
+
+		{include file="common/head" /}
+
+		<div class="first-screen">
+			<div class="slide">
+				<div class="ppt">  
+					<script type="text/javascript">myFocus.set({id:'myFocus', pattern:'mF_shutters'});</script>
+					<div id="myFocus" style="width:800px; height:470px;border:0;">  
+						<div class="pic" style="border:0"> 
+							<ul>
+							    {foreach $banner as $val} 
+							    <li>
+								    <a href="{$val.ppt_url}" target="_blank">
+								  		<img src="{$Think.config.domain}__images__/{$val.ppt_image}" thumb="" title="{$val.ppt_title}" alt="{$val.ppt_title}" text="{$val.ppt_title}" width="784" height="344"/>	
+								    </a>
+							    </li>
+							    {/foreach} 
+							</ul>
+							 <div id="banner-y" style="width:100px;">
+								{foreach $banner as $val} 
+								<div class="banner-y"></div>
+								{/foreach} 
+							</div>
+							<div class="banner_up"><i class="iconfont">&#xe60b;</i></div><div class="banner_down"><i class="iconfont">&#xe64c;</i></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<div class="index-banner-right">
+		    <div class="H_Dwelcome">
+				<div class="WeTitle">
+					<a href="{$Think.config.domain}" target="_blank">
+						<img src="{$Think.config.domain}__images__/{$user_info.head_portrait}" title="" alt="加载失败" width="50" height="50" onerror="this.src='__static__/common/images/default.jpg'"/>
+					</a>
+					<p>
+						{if condition="($user_info == '') "}
+						<span>Hi，欢迎来到</span><span>{$Think.config.sitename}</span>
+						{else /} 
+						<span>Hi.</span>
+						<a href="{$Think.config.domain}" target=_black><span><b style="font-size:14px;">{$user_info.username}</b></span></a>
+						{/if}
+					</p>
+				</div>
+				{if condition="($user_info == '')"}
+				<!--设置用户登录前的效果-->
+				<div class="loginBtn_box" style="width:100%;height:auto;overflow:hidden;">
+					<a href="{$Think.config.domain}/user_login" target="_self" class="log_Btn">登录</a>
+					<a href="{$Think.config.domain}/user_register" target="_self" class="logBtn_cur">免费注册</a>
+					<a href="{$Think.config.domain}/shop_register" style="border-right:1px solid #FF4200;" target="_self">开店</a> 
+				</div>
+				{else /}
+				<!--设置用户登录后的效果-->
+				<div class="loginBtn_box loginBtn_box1" style="color:white;">
+                    <a href="{$Think.config.domain}" target=_black>待付款<span>{$user_info[0][0]}</span></a>
+					<a href="{$Think.config.domain}" target=_black>待发货<span>{$user_info[0][1]}<span></a>
+					<a href="{$Think.config.domain}" target=_black>待收货<span>{$user_info[0][2]}<span></a>
+					<a href="{$Think.config.domain}" target=_black>待评价<span>{$user_info[0][3]}<span></a>					
+				</div>
+				{/if}
+			</div>
+			<div class="infoTab p_tab">
+        <ul class="p_tab_keylist">
+          <li class="p_tab_key cur">最新采购</li>
+		  <li class="p_tab_key cur">最新公告</li>
+          <li class="p_tab_key cur">促销信息</li>
+        </ul>
+        <div class="p_tab_val cg" style="display: block;">
+			<ul class="p_com_list">
+				{foreach $purchase_info as $val}
+				<li class="imp">
+					<h4>
+						<a href="{$Think.config.domain}/purchase" target="_blank" title="{$val.message}">{$val.message}</a>
+					</h4>
+					<span>{$val.addtime}</span>
+				</li>
+				{/foreach}
+          </ul>
+        </div>
+		<div class="p_tab_val cx">
+         <ul class="p_com_list">  
+			{foreach $new_notice as $val}
+			<li>
+              <h4>
+	              <a href="{:url('index/Index/article','thread_id='.$val.thread_id)}" target="_blank" title="{$val.title}">{$val.title}
+	              	<img width="16" height="20" src="__static__/home/images/hotIcon.gif" >
+	              </a>
+              </h4>
+            </li>
+			{/foreach}
+          </ul>
+        </div>
+        <div class="p_tab_val cx" style="display: none;">
+          <ul class="p_com_list">
+			{foreach $promotional_information as $val}
+			<li class="imp">
+				<h4>
+				  <a href="{:url('index/Index/article','thread_id='.$val.thread_id)}" target="_blank" title="{$val.title}">
+				    {$val.title}
+				  	<img width="16" height="20" src="__static__/home/images/hotIcon.gif" alt="{$val.title}">
+				  </a>
+				</h4>
+            </li>
+			{/foreach}
+          </ul>
+        </div>
+      </div>
+        <div class="promotion-img"> 
+		<table><tr style="font-size:14px;"><td><img src="__static__/home/images/stat.png" width="15" title="浏览" alt="加载失败"></td><td>当前浏览人次：</td><td><b><?=mt_rand(3000,5000)?></b> 次</td></tr></table> 
+		</div>
+		<div class="promotion-img">
+			<a href="{$Think.config.domain}/member/vote" target="_blank">
+				<img src="__static__/home/images/vote.jpg" alt="品脾评分" title="品牌评分" height="90" width="190">
+			</a> 
+		</div>
+    </div>
+</div>
+
+<br/>
+
+		<!--商品楼层-->
+		{foreach $goods_floor as $key=>$val01}
+		<div class="layList layList1">
+			<div class="titlebox">
+				<div class="comTitle"><i class="comIcon1 newIndexIcon">{$key+1}F</i><span>{$val01.cat_name}</span></div>
+				<div class="rightMenu">
+					{foreach $val01['cat_brand'] as $val}
+					<a href="{:url('index/Index/catalog','brand_id='.$val.brand_id)}" target="_blank" title="{$val.brand_name}" class="rightMenu-a">{$val.brand_name}</a>
+					{/foreach}
+				</div>
+			</div>
+			<div class="spiritWrap">
+				<div class="bannerSlier">
+					<div class="imgBox">
+						<ul class="clearfix">
+							<li>
+								<a href="#" title="" target="_blank">
+									<img height="485" width="210" src="__static__/home/images/12.jpg" onerror="this.src='__static__/common/images/nopic.jpg'" alt="">
+								</a>
+							</li>
+							<li>
+								<a href="#" title="" target="_blank">
+									<img height="485" width="210" src="__static__/home/images/12.jpg" onerror="this.src='__static__/common/images/nopic.jpg'" alt="">
+								</a>
+							</li>
+							<li>
+								<a href="#" title="" target="_blank">
+									<img height="485" width="210" src="__static__/home/images/12.jpg" onerror="this.src='__static__/common/images/nopic.jpg'" alt="">
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div class="btnBox">
+						<span class="btnBg smallUl">
+							<em>1</em>
+							<em>2</em>
+							<em>3</em>
+						</span>
+					</div>
+				</div>
+				<div class="spiritList">
+					<ul class="clearfix">
+						{foreach $val01['items'] as $val}
+						<li>
+							<div class="spiritListPic">
+								<a href="{:url('index/Index/thread','goods_id='.$val.goods_id)}" target="_blank" title="{$val.real_price}">
+									<img src="{$Think.config.domain}__images__/{$val.goods_image}" width="160" height="160" alt="{$val.goods_name}" onerror="this.src='__static__/common/images/nopic.jpg'">
+								</a>
+							</div>
+							<div class="spiritListTit">
+								<a href="{:url('index/Index/thread','goods_id='.$val.goods_id)}" target="_blank" title="{$val.real_price}">{$val.goods_name}</a>
+							</div>
+							<div class="spiritListPrice">
+								<strong class="jxIndex_nowPrice_5074">￥{$val.real_price}</strong>
+							</div>
+						</li>
+						{/foreach}
+					</ul>
+				</div>
+			</div>
+			<div class="topTenWrap">
+				<div class="hotWordBox">
+					<ul>
+						<li>
+							<h3><i></i><span>热门推荐</span></h3>
+							<p>
+								{foreach $val01['items'] as $val}
+								<a href="{:url('index/Index/catalog','brand_id='.$val.brand_id)}" target="_blank" title="{$val.goods_name}">
+									<span>{$val.goods_name}</span>span>
+								</a>
+								{/foreach}
+							</p>
+						</li>
+						<li class="mt7">
+							<h3><i></i><span>轴承品牌</span></h3>
+							<p>
+								{foreach $val01['cat_brand'] as $val}
+								<a href="{:url('index/Index/catalog','brand_id='.$val.brand_id)}" target="_blank" title="{$val.brand_name}">
+									<span>{$val.brand_name}</span>span>
+								</a>
+								{/foreach}
+							</p>
+						</li>
+					</ul>
+				</div>
+				<div class="topTenBox">
+					<div class="topTenNavBox">
+						<h3><i class="topTen1 newIndexIcon"></i><span>本周热销排行榜</span></h3>
+					</div>
+					<div class="topTenConWrap">
+						<div class="topTenCon">
+							<ul class="clearfix">
+								{foreach $val01['hot_goods'] as $val}
+								<li>
+									<i class="topTenOne"></i>
+									<div class="topTenPic">
+										<a href="{:url('index/Index/thread','goods_id='.$val.goods_id)}" target="_blank" title="{$val.goods_name}">
+											<img src="{$Think.config.domain}__images__/{$val.goods_image}" width="90" height="90" alt="图片加载中..." onerror="this.src='__static__/common/images/nopic.jpg'">
+										</a>
+									</div>
+									<div class="topTenTitBox">
+										<div class="topTenTit">
+											<a href="{:url('index/Index/thread','goods_id='.$val.goods_id)}" target="_blank" title="{$val.goods_name}">{$val.goods_name}</a>
+										</div>	
+										<div class="topTenPrice">
+											<strong>￥{$val.real_price}</strong>
+										</div>
+									</div>
+								</li>
+								{/foreach}
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{/foreach}
+
+		<!--分类-->
+		<div id="classify">
+			<div class="classify">轴承分类</div>
+			<div class="classify_tr">
+			{for start="0" end="3"}
+				<div class="classify_td">
+				{foreach $top_catalog as $k=>$val01}
+					{if condition="(($k >= $i*2) && ($k < $i*2+2)) "}
+					<div class="classify_li">
+						<a href="{:url('index/Index/catalog','cat_id='.$val01.cat_id)}" class="classify_title" target=_black>{$val01.cat_name}</a>
+						<ul>
+							<li>
+							{foreach $val01['medium_catalog'] as $k02=>$val02}
+								<a class="classify_color<?=rand(0,2)?>" href="{:url('index/Index/catalog','cat_id='.$val02.cat_id)}" title="{$val02.cat_name}"  target="_blank">{$val02.cat_name}</a>
+							{/foreach}
+							</li>
+						</ul>
+					</div>
+					{/if}
+				{/foreach}
+				</div>
+			{/for}
+			</div>
+		</div>
+
+		<!--新闻中心-->
+		<div id="information">
+			<div class="information_left">
+				<div class="information">
+					<a href="javascript:;" class="infor_tit">轴承新闻中心</a>
+					<div class="inf_cont">
+						<a href="javascript:;" class="inf_cont_left"><img src="__static__/home/images/news_info.jpg" /></a>
+						<div class="inf_cont_right">
+							<ul class="news_top">
+								{foreach $news_online as $k=>$val}
+									{if condition="($k < 8)"}
+									<li>
+										<a target="_blank" href="{:url('index/Index/article','thread_id='.$val.thread_id)}" title="{$val.title}">{$val.title}</a>
+										<span><?=substr($val['addtime'],0,10)?></span>
+									</li>
+									{/if}
+								{/foreach}
+							</ul>
+							<ul class="news_bottom">
+								{foreach $news_online as $k=>$val}
+									{if condition="($k >= 8)"}
+									<li>
+										<a target="_blank" href="{:url('index/Index/article','thread_id='.$val.thread_id)}" title="{$val.title}">{$val.title}</a>
+									</li>
+									{/if}
+								{/foreach}
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="information">
+					<a href="javascript:;" class="infor_tit">轴承行业资讯</a>
+					<div class="inf_cont1">
+						<a href="javascript:;" class="inf_cont_left"><img src="__static__/home/images/news1.jpg" /></a>
+						<ul class="inf_cont_right zhanhui">
+							{foreach $industry_information as $k=>$val}
+							<li>
+								<a target="_blank" href="{:url('index/Index/article','thread_id='.$val.thread_id)}" title="{$val.title}">{$val.title}</a>
+								<span><?=substr($val['addtime'],0,10)?></span>
+							</li>
+							{/foreach}
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="information_r">
+				<a href="javascript:;" class="infor_t" target=_black>轴承知识</a>
+				<a href="javascript:;" class="infor_t" target=_black>市场动态</a>
+				<a href="javascript:;" class="infor_t" target=_black>产品资讯</a>
+				<div class="inf_know">
+					<div class="know-lists">
+						{foreach $bearing_knowledge as $val}
+						<a target="_blank" href="{:url('index/Index/article','thread_id='.$val.thread_id)}" title="{$val.title}">{$val.title}</a>
+						{/foreach}
+					</div>
+					<div class="know-lists">
+						{foreach $market_dynamics as $val}
+							<a target="_blank" href="{:url('index/Index/article','thread_id='.$val.thread_id)}" title="{$val.title}">{$val.title}</a>
+						{/foreach}
+					</div>
+					<div class="know-lists">
+						{foreach $products_information as $val}
+						<a target="_blank" href="{:url('index/Index/article','thread_id='.$val.thread_id)}" title="{$val.title}">{$val.title}</a>
+						{/foreach}
+					</div>	
+				</div>
+			</div>
+		</div>
+
+		<p style="width:1200px;text-align:left;margin:0 auto;margin-top:30px;">  
+			友情链接：
+			  {foreach $friendlink as $val}
+			  <a style="padding:0 10px;color:#666;" href="{$val.link_url}" title="{$val.link_title}" target="_blank">{$val.link_title}</a>
+			  {/foreach}
+		</p>
+
+		{include file="common/foot" /}
+		
+	</body>
+</html>
